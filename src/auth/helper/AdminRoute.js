@@ -1,29 +1,29 @@
-// import React from "react";
-// import { Route } from "react-router-dom";
-// import { isAdmin } from ".";
-// import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Route } from "react-router-dom";
+import { isAdmin } from ".";
+import { useNavigate } from "react-router-dom";
 
-// const AdminRoute = ({ component: Component, ...rest }) => {
+const AdminRoute = ({ component: Component, ...rest }) => {
 
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-//   return (
-//     <Route
-//       {...rest}
-//       render={(props) => {
-//         return isAdmin() ? (
-//           <Component {...props} />
-//         ) : (
-//           <navigate
-//             to={{
-//               pathname: "/signin",
-//               state: { from: props.location },
-//             }}
-//           />
-//         );
-//       }}
-//     />
-//   );
-// };
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        return isAdmin() ? (
+          <Component {...props} />
+        ) : (
+          <navigate
+            to={{
+              pathname: "/signin",
+              state: { from: props.location },
+            }}
+          />
+        );
+      }}
+    />
+  );
+};
 
-// export default AdminRoute;
+export default AdminRoute;

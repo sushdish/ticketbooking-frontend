@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
-import { BrowserRouter as Router , Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./core/Home";
+import Homev2 from "./core/Homev2";
+
 import Signin from "./user/Signin";
 import Signup from "./user/Signup";
 import Cart from "./core/Cart";
@@ -26,14 +28,20 @@ import Testing from "./core/components/Testing"
 const App = () => {
   return (
     <Router>
-      
+
       <Routes>
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Homev2 />} />
         {/* <Route path="/testing" element={<Testing/>} /> */}
-        <Route path="/signup" element={<Signup/>} />
-        <Route path="/signin" element={<Signin/>} />
-        <Route path="/cart" element={<Cart/>} />
-        <Route path="/booking-modal" element={<BookingModal/>} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/booking-modal" element={<BookingModal />} />
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user/mybookings" element={<MyBookings />} />
+        </Route>
+
+
         {/* <Route path="/card" element={<Card/>} />
         <Route path="/user/dashboard" element={
           <PrivateRoute>
@@ -41,7 +49,6 @@ const App = () => {
           </PrivateRoute>
         }
         />
-        <PrivateRoute path="/user/mybookings" element={<MyBookings/>} />
         <PrivateRoute path="/user/mycancellations" element={<MyCancellations/>} />
         <PrivateRoute path="/user/requestsolved" element={<RequestSolved/>} /> */}
         {/* <AdminRoute path="/admin/dashboard" element={<AdminDashBoard/>} />
@@ -69,7 +76,7 @@ const App = () => {
           element={<AdminSolvedReq/>}
         /> */}
       </Routes>
-     
+
     </Router>
   );
 };

@@ -121,17 +121,21 @@ const Signin = () => {
   };
 
   return (
-    <Base
-      title="Signin"
-      description="Signin to start shopping!"
-      className="container"
-    >
+    <div>
+      <Base
+        title="Signin"
+        description="Signin to start shopping!"
+        className="container"
+      >
+
+      </Base>
       {err && errorMessage()}
       {loading && successMessage()}
       {signinForm()}
       {loading && performRedirect()}
       <p className="text-white text-center">{JSON.stringify(values)}</p>
-    </Base>
+    </div>
+
   );
 };
 

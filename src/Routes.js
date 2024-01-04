@@ -12,6 +12,7 @@ import PrivateRoute from "./auth/helper/PrivateRoute";
 import AdminRoute from "./auth/helper/AdminRoute";
 import AddCategory from "./admin/AddCategory";
 import ManageCategories from "./admin/ManageCategories";
+import ManageCategoriesV2 from "./admin/ManageCategoriesV2";
 import UpdateCategory from "./admin/UpdateCategory";
 import AddProduct from "./admin/AddProduct";
 import ManageProducts from "./admin/ManageProducts";
@@ -31,18 +32,32 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Homev2 />} />
-        {/* <Route path="/testing" element={<Testing/>} /> */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/booking-modal" element={<BookingModal />} />
 
         <Route element={<PrivateRoute />}>
-          <Route path="/user/mybookings" element={<MyBookings />} />
+          <Route path="/user/userdashboard" element={<UserDashBoard />} />
         </Route>
 
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/admindashboard" element={<AdminDashBoard />} />
+        </Route>
 
-        {/* <Route path="/card" element={<Card/>} />
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/create/category" element={<AddCategory />} />
+        </Route>
+
+        {/* <Route element={<AdminRoute />}>
+          <Route path="/admin/categories/:categoryId" element={<ManageCategories />} />
+        </Route> */}
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/categories/:categoryId" element={<ManageCategoriesV2 />} />
+        </Route>
+
+        {/* <Route path="/card" element={<Card/>} />z
         <Route path="/user/dashboard" element={
           <PrivateRoute>
             <UserDashBoard/>

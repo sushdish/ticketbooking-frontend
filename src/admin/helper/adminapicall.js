@@ -20,6 +20,7 @@ export const createCategory = (userId, token, category) => {
 };
 
 export const getCategoryById = (categoryId) => {
+  console.log(categoryId, "1")
   return fetch(`${API}/category/${categoryId}`, {
     method: "GET",
   })
@@ -37,7 +38,7 @@ export const getAllCategories = () => {
     .catch((err) => console.log(err));
 };
 
-export const updateCategory = (categoryId, userId, token, category) => {
+export const updateCategory = (categoryId, userId, token, requestBody) => {
   return fetch(`${API}/category/${categoryId}/${userId}`, {
     method: "PUT",
     headers: {
@@ -45,7 +46,7 @@ export const updateCategory = (categoryId, userId, token, category) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(category),
+    body: JSON.stringify(requestBody),
   })
     .then((response) => response.json())
     .catch((err) => console.log(err));

@@ -19,6 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { isAdmin } from '../../auth/helper/index';
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -70,6 +71,22 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [user, setUser] = React.useState([
+    {name:" My Bookings", url:"/user/mybookings" },
+    {name:" My Cancellations", url:"/user/mycancellations" },
+    {name:" User request Solved", url:"/user/requestsolved" },
+  ])
+
+  const [admin, setAdmin] = React.useState([
+    {name:"Create Categories", url:"/admin/create/category" },
+    {name:"Manage Categories", url:"/admin/categories/:categoryId"},
+    {name:"Create Products", url:"/admin/create/product"},
+    {name:"Manage Products", url:"/admin/create/product"},
+    {name:"User Cancellation Request", url:"/admin/cancellation/update"},
+    {name:"Solved Cancellation Record", url:"/admin/cancellation/adminsolved"},
+  ])
+
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -78,6 +95,12 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+   const navigationItems = isAdmin() ? admin : user;
+
+   const handleSubmit = (url) => {
+    navigate(url)
+   }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -118,30 +141,18 @@ export default function PersistentDrawerLeft() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Category', 'Trips', 'User Cancellation Request', 'Request Solved' , 'Settings'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
+          {navigationItems.map((text, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton onClick={() => handleSubmit(text.url)}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={text.name} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         {/* <DrawerHeader /> */}

@@ -49,13 +49,22 @@ const App = () => {
           <Route path="/admin/create/category" element={<AddCategory />} />
         </Route>
 
-        {/* <Route element={<AdminRoute />}>
+        <Route element={<AdminRoute />}>
           <Route path="/admin/categories/:categoryId" element={<ManageCategories />} />
-        </Route> */}
+        </Route>
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin/categories/:categoryId" element={<ManageCategoriesV2 />} />
+          <Route path="/admin/create/product" element={<AddProduct />} />
         </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/product/update/:productId" element={<ManageProducts />} />
+        </Route>
+
+
+        {/* <Route element={<AdminRoute />}>
+          <Route path="/admin/categories/:categoryId" element={<ManageCategoriesV2 />} />
+        </Route> */}
 
         {/* <Route path="/card" element={<Card/>} />z
         <Route path="/user/dashboard" element={

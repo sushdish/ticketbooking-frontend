@@ -28,23 +28,18 @@ const AddCategory = () => {
     success: "false",
     message: '',
   });
-  // const [error, setError] = useState(false);
-  // const [success, setSuccess] = useState(false);
-
+ 
   const { token, user } = isAuthenticated();
   const {name, error, success, message} = categoryName
 
   const handleChange = (event) => {
     setCategoryName({...categoryName, error: "", [event.target.name]: event.target.value});
-    // setError(false);
-    // setSuccess(false);
   };
 
   const onSubmit = (event) => {
     event.preventDefault();
     setCategoryName({...categoryName, error: false, success: false})
-    // setError(false);
-    // setSuccess(false);
+   
 
     createCategory(user._id, token, categoryName)
       .then((data) => {
@@ -53,13 +48,9 @@ const AddCategory = () => {
           setCategoryName({...categoryName, error: data.err, success: false});
         } else {
           setCategoryName({...categoryName, name: "", error: false, success: true, message: data.message});
-          // setError(false);
-          // setSuccess(true);
         }
       })
       .catch((err) => {
-        // setError("Request Failed!");
-        // setSuccess(false);
         console.log(err);
       });
   };
@@ -68,11 +59,11 @@ const AddCategory = () => {
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
+        {/* {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
 
           <Alert severity="success">{message} </Alert>
         </Stack>
-        ) : ("")}
+        ) : ("")} */}
         <Box
           sx={{
             marginTop: 8,
@@ -100,11 +91,6 @@ const AddCategory = () => {
               autoComplete="name"
               autoFocus
             />
-            
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
             <Button
               type="submit"
               fullWidth
@@ -114,96 +100,13 @@ const AddCategory = () => {
               Create Category
             </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
-              {/* <Grid item >
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid> */}
             </Grid>
           </Box>
         </Box>
         {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
-  );
-
-
-
-
-
-
-
-
-
-
-  // const categoryForm = () => {
-  //   return (
-  //     <div className="row">
-  //       <form className="col col-lg-6 col-md-8 col-sm-12">
-  //         <div className="form-group">
-  //           <label htmlFor="categoryName" className="text-light">
-  //             Category Name
-  //           </label>
-  //           <input
-  //             type="text"
-  //             className="form-control"
-  //             name="categoryName"
-  //             value={categoryName}
-  //             onChange={handleChange}
-  //             id="categoryName"
-  //             placeholder="Ex. Mode of Transport"
-  //             required
-  //             autoFocus
-  //           />
-  //           <button
-  //             type="submit"
-  //             className="btn btn-success mt-2"
-  //             onClick={onSubmit}
-  //           >
-  //             Create
-  //           </button>
-  //         </div>
-  //       </form>
-  //     </div>
-  //   );
-  // };
-
-  // const errorMessage = () => {
-  //   return (
-  //     <div className="row">
-  //       <div className="col col-lg-6 col-md-8 col-sm-12">
-  //         <div className="alert alert-dark">{error}</div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // const successMessage = () => {
-  //   return (
-  //     <div className="row">
-  //       <div className="col col-lg-6 col-md-8 col-sm-12">
-  //         <div className="alert alert-success">Success</div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // return (
-  //   <Base
-  //     title="Create Category"
-  //     description="Add a new category for products"
-  //     className="container"
-  //   >
-  //     {error && errorMessage()}
-  //     {success && successMessage()}
-  //     {categoryForm()}
-  //   </Base>
-  // );
+  ); 
 };
 
 export default AddCategory;

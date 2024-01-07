@@ -2,6 +2,8 @@ import React, { Fragment } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./core/Home";
 import Homev2 from "./core/Homev2";
+import Homev3 from "./core/Homev3";
+
 
 import Signin from "./user/Signin";
 import Signup from "./user/Signup";
@@ -32,6 +34,9 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Homev2 />} />
+        <Route path="/v3" element={<Homev3 />} />
+        {/* <Route path="/" element={<Home />} /> */}
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/cart" element={<Cart />} />

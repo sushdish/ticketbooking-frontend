@@ -10,36 +10,56 @@ import Paper from '@mui/material/Paper';
 // import Grid from '@mui/material/Grid';
 import BookingStepper from '../core/components/BookingStepper'
 import TextField from '@mui/material/TextField';
-import { getAllTrip } from "../admin/helper/adminapicall";
+import { getAllTrip , bookTrip} from "../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Typography } from '@mui/material';
+import { Typography, Select,
+  MenuItem,
+  FormControl,
+  InputLabel, } from '@mui/material';
 import BookingModal from "./components/BookingModal"; 
+import Booktrip from "./components/Booktrip";
+import { isAuthenticated } from '../auth/helper/index';
 
-
-const Home = ({trip}) => {
-    console.log(trip, "94")
+const Home = () => {
+    
+    const { user, token } = isAuthenticated();
     const [trips, setTrips] = useState([]);
-    const [err, setError] = useState(false);
-    const [selectedTrip, setSelectedTrip] = useState(null);
-    const [isDialogOpen, setDialogOpen] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+    const [selectedTrip, setSelectedTrip] = useState({});
+    const [isBookDialogOpen, setBookDialogOpen] = useState(false);
+    const [isViewDialogOpen, setViewDialogOpen] = useState(false);
+    const [values, setValues] = useState({
+    paymentReferenceNumber: "",
+    booking_details: {
+      seatType:"",
+      travelClass: "",
+      paymentType: "",
+    },
+    createdBook: "",
+    loading: false,
+    err: "",
+    });
+
+    const [index, setSelectedIndex] = useState({})
+
+    const { paymentReferenceNumber, booking_details, createdBook, loading, err } = values
+
 
     const preloadProducts = () => {
         getAllTrip().then((data) => {
             if (data.err) {
-                setError(data.err);
+                console.log(data.err);
             } else {
                 setTrips(data);
             }
         })
             .catch((error) => {
                 console.error("Error fetching trip data:", error);
-                setError("Error fetching trip data");
+                // setError("Error fetching trip data");
             });
     };
 
@@ -47,56 +67,83 @@ const Home = ({trip}) => {
         preloadProducts();
     }, []);
 
-    const columns = [
-        { field: 'tripName', headerName: 'Trip Name', width: 70 },
-
-        {
-            field: 'viewButton',
-            headerName: 'View',
-            sortable: false,
-            width: 100,
-            renderCell: (params) => (
-                <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleViewButtonClick(params.row)}
-              >
-                View
-              </Button>
-            )
-        }
-    ];
+   
 
     const handleViewButtonClick = (selectedRow) => {
         setSelectedTrip(selectedRow);
-        setDialogOpen(true);
+        setViewDialogOpen(true)
       };
     
-      const handleCloseDialog = () => {
-        setDialogOpen(false);
+      const handleCloseViewDialog  = () => {
+        setViewDialogOpen(false);
+        // setSelectedIndex(null)
       };
 
-      const openModal = () => {
-        setShowModal(true);
-        console.log("Modal is now open");
+      const handleBookButtonClick = (selectedRow) => {
+        setSelectedTrip(selectedRow);
+        setBookDialogOpen(true);
+      };
+    
+      const handleCloseBookDialog = () => {
+        setBookDialogOpen(false);
+        // setSelectedIndex(null);
       };
 
-      const closeModal = () => {
-        setShowModal(false);
+      const handleChange = (name) => (event) => {
+        const value = event.target.value;
+      
+      
+        if (name === "booking_details") {
+          const updatedBookingDetails = {...values.booking_details, [event.target.name]: value};
+      
+          setValues({...values, booking_details: updatedBookingDetails,});
+        } else {
+          setValues({ ...values, [name]: value });
+        }
       };
 
-      const handleBookNow = (trip) => {
+      const handleBook = () => {
+        setValues({ ...values, err: false, loading: true });
         if (!selectedTrip || !selectedTrip.trips_details) {
-            console.error('Invalid trip object:', selectedTrip);
-            return;
-          }
-        console.log('Trip object before opening modal:', trip);
-        
-        console.log("Book button clicked");
-       
-        openModal(); 
-      };
+          console.error("Invalid selectedTrip or missing trips_details");
+          return;
+        }
+        // setValues({ ...values, err: false, loading: true });
 
+        const requestBody = {
+          tripId: selectedTrip._id, 
+          paymentReferenceNumber: values.paymentReferenceNumber,
+          paymentType: values.booking_details.paymentType,
+          travelClass: values.booking_details.travelClass,
+          seatType: values.booking_details.seatType,
+        };
+        
+
+        bookTrip(user._id, token, requestBody )
+    .then((data) => {
+      console.log(data, "86")
+      if (data.err) {
+        setValues({ ...values, err: data.err, loading: false });
+      } else {
+        setValues({
+          ...values,
+          paymentReferenceNumber: "",
+          booking_details: {
+            seatType: "",
+            travelClass: "",
+            paymentType: "",
+          },
+          createdBook: data,
+          loading: false,
+          err: "",
+        });
+        setBookDialogOpen(false);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+      }
      
 
     return (
@@ -112,13 +159,13 @@ const Home = ({trip}) => {
           <Table sx={{ minWidth: 300, maxWidth: 600 }}  aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Flight Name </TableCell>
-                <TableCell>Trip Details</TableCell>
+                <TableCell>Trip NAme </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
           {trips.map((trip) => (
-            <TableRow key={trip}  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableRow key={trip._id}  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 {trip.name}
               </TableCell>
@@ -131,6 +178,15 @@ const Home = ({trip}) => {
                   View
                 </Button>
               </TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleBookButtonClick(trip)}
+                >
+                  Book
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -138,11 +194,11 @@ const Home = ({trip}) => {
         </TableContainer>
 
         {/* Dialog to display trip details */}
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+      <Dialog open={isViewDialogOpen} onClose={handleCloseViewDialog}>
         <DialogTitle>Trip Details</DialogTitle>
         <DialogContent>
           {/* Render trip details in the Dialog content */}
-          {selectedTrip && (
+          {selectedTrip && selectedTrip.trips_details &&(
             <div>
               <p>Trip Name: {selectedTrip.name}</p>
               <p>Trip Number: {selectedTrip.tripNumber}</p>
@@ -158,31 +214,64 @@ const Home = ({trip}) => {
               <p>Currency: {selectedTrip.trips_details.Currency}</p>
               <p>PaymentType: {selectedTrip.trips_details.PaymentType.join(', ')}</p>
               <p>RewardPoints: {selectedTrip.trips_details.RewardPoints}</p>
-             
             </div>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button onClick={handleCloseViewDialog} color="primary">
             Close
           </Button>
+          
         </DialogActions>
       </Dialog>
 
-      {/* <BookingModal
-        showModal={showModal} // You can modify this based on your requirements
-        handleClose={closeModal}
-        trip={selectedTrip}
-      /> */}
 
-          {/* <button href="#" className="btn btn-success" onClick={() => handleBookNow(selectedTrip || trip)}>
+      <Dialog open={isBookDialogOpen} onClose={handleCloseBookDialog}>
+        <DialogTitle>Trip Details</DialogTitle>
+        <DialogContent>
+        
+          <FormControl fullWidth>
+              <InputLabel id="seat-type-label">Seat Type</InputLabel>
+                 <Select 
+                 labelId="seat-type-label" 
+                 id="seat-type" 
+                 value={values.booking_details.seatType} 
+                 onChange={(event) => handleChange("booking_details")(event)}
+                 >
+{selectedTrip && selectedTrip.trips_details && selectedTrip.trips_details.SeatType.map((seatType, index) => (
+  
+             <MenuItem key={index} value={seatType}>
+                   {seatType}
+             </MenuItem>
+                 ))}
+             </Select>
+            </FormControl>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseBookDialog} color="primary">
+            Close
+          </Button>
+          <Button onClick={handleBook} color="primary">
             Book
-                </button> */}
-         {/* Modal */}
-         {/* {showModal && <BookingModal showModal={showModal} handleClose={closeModal} trip={trip} />} */}
+          </Button>
+        </DialogActions>
+      </Dialog>
       </div>
     </>
       );
 };
 
 export default Home;
+{/* <FormControl fullWidth>
+<InputLabel id="seat-type-label">Seat Type</InputLabel>
+<Select labelId="seat-type-label" id="seat-type" value={values.booking_details.seatType} 
+  onChange={(event) => handleChange("booking_details")(event)}
+>
+  {trips.map((seatType , index) => (
+    <MenuItem key={index} value={seatType}>
+      {seatType}
+    </MenuItem>
+  ))}
+</Select>
+</FormControl> */}

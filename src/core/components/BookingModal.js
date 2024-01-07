@@ -26,13 +26,14 @@ const { paymentReferenceNumber, booking_details, createdBook, loading, err } = v
 
 const handleChange = (name) => (event) => {
   const value = event.target.value;
-
+  console.log(value, "44")
 
   if (name === "booking_details") {
     const updatedBookingDetails = {...values.booking_details, [event.target.name]: value};
-
+    console.log(updatedBookingDetails, "33")
     setValues({...values, booking_details: updatedBookingDetails,});
   } else {
+    console.log(values, "55")
     setValues({ ...values, [name]: value });
   }
 };

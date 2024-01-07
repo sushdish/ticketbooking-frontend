@@ -94,15 +94,15 @@ export const getAllTrip = () => {
     .catch((err) => console.log(err));
 };
 
-export const updateTrip = (tripId, userId, token, trip) => {
-  console.log(tripId, "97")
+export const updateTrip = (tripId, userId, token, requestBody) => {
+  console.log(requestBody, "97")
   return fetch(`${API}/trip/${tripId}/${userId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(trip),
+    body: JSON.stringify(requestBody),
   })
     .then((response) => {
       return response.json();

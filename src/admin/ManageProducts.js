@@ -43,13 +43,13 @@ const MatEdit = ({tripId, setTrips}) => {
     err: "",
     success:"",
     message: "",
-   
+    createdTrip: "",
    
     // categories: [],
   });
   
 
-  const { name, category, tripNumber, trips_details, loading, err,  success, message } = values;
+  const { name, category, tripNumber, trips_details, loading, err,  success, message , createdTrip} = values;
 
   const handleEditClick = () =>  {
     console.log("Edit button clicked");
@@ -75,7 +75,7 @@ const MatEdit = ({tripId, setTrips}) => {
             category: data.category,  
             tripNumber: data.tripNumber, 
             trips_details: {
-              DestinationA: data.DestinationA,
+              DestinationA: data.trips_details.DestinationA,
               DestinationB: data.DestinationB,
               SeatCount: data.SeatCount,
               StartTime: data.StartTime,
@@ -107,31 +107,51 @@ const MatEdit = ({tripId, setTrips}) => {
     setValues({ ...values, success: false }); 
   };
 
+  const handleChange = (name) => (event) => {
+    const value = event.target.value;
+  
+    if (name === 'trips_details') {
+      
+      const tripsDetails = { ...values.trips_details, [event.target.name]: value };
+      setValues({ ...values, trips_details: tripsDetails });
+      
+    } else {
+      setValues({ ...values, [name]: value });
+      
+    }
+  };
+
   const handleUpdate = (event) => {
     event.preventDefault();
     console.log("Updating trip with values:", values);
-    setValues({ ...values, err: false });
-    updateTrip(tripId, user._id, token, values)
+    const requestBody = {
+    name: values.name,
+    category: values.category,
+    tripNumber: values.tripNumber,
+    trips_details: values.trips_details,
+    }
+    
+    updateTrip(tripId, user._id, token, requestBody)
       .then((data) => {
-        console.log(data, "3")
+        console.log("Response from updateTrip:", requestBody  );
         if (data.err) {
           setValues({ ...values, err: data.err, success: false });
         } else {
-          setValues({...values, createdTrip: data, loading: false});
+          setValues({...values, createdTrip: data, success: true});
           handleClose()
 
           getAllTrip()
           .then((updatedTrips) => {
-            console.log(updatedTrips, "4")
+            console.log("Updated Trips:", updatedTrips);
             setTrips(updatedTrips);
           })
           .catch((error) => {
-            console.error('Error fetching categories:', error);
+            console.error('Error fetching trips:', error);
           });
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error('Error updating trip:', err);
       });
   }
 
@@ -179,6 +199,21 @@ const MatEdit = ({tripId, setTrips}) => {
               console.log('Changing value:', e.target.value);
               setValues((prevValues) => ({ ...prevValues, tripNumber: e.target.value }))}}
           />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="DestinationA"
+            name="DestinationA"
+            label="DestinationA"
+            type="DestinationA"
+            fullWidth
+            variant="standard"
+            value={values.trips_details.DestinationA}
+            // onChange={(e) => {
+              // console.log('Changing value:', e.target.value);
+              // setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
+          />
           {/* <TextField
               autoFocus
               margin="dense"
@@ -211,61 +246,12 @@ const MatEdit = ({tripId, setTrips}) => {
   );
 }
 
-  // const onClick = (tripId) => () => {
-  //   console.log(tripId, "QQ")
-  //   deleteTrip(tripId, user._id, token)
-  //     .then((data) => {
-  //       console.log(data, "XX")
-  //       if (data.err) {
-  //         console.log(data.err);
-  //       } else {
-  //         preload();
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // return (
-  //   <Base
-  //     title="Manage Trips"
-  //     description="Welcome to product management section"
-  //     className="container"
-  //   >
-  //     <table className="table table-dark table-borderless table-hover">
-  //       <tbody>
-  //         {trips.map((trip, index) => {
-  //           return (
-  //             <tr key={index}>
-  //               <th scope="row" className="text-125">
-  //                 {trip.name}
-  //               </th>
-  //               <td className="text-center">
-  //                 <Link to={`/admin/product/update/${trip._id}`}>
-  //                   <i className="fas fa-edit fas-125"></i>
-  //                 </Link>
-  //               </td>
-  //               <td className="text-center">
-  //                 <i
-  //                   className="fas fa-trash fas-125"
-  //                   onClick={onClick(trip._id)}
-  //                 ></i>
-  //               </td>
-  //             </tr>
-  //           );
-  //         })}
-  //       </tbody>
-  //     </table>
-  //   </Base>
-  // );
-
   const Demo = () => {
     const [trips, setTrips] = useState([]);
   
     useEffect(() => {
-      getAllTrip()
-        .then((data) => {
+        getAllTrip()
+          .then((data) => {
           console.log(data, "TT")
           if (data.err) {
             console.log(data.err);

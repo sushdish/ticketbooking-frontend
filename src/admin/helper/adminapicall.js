@@ -54,8 +54,8 @@ export const updateCategory = (categoryId, userId, token, requestBody) => {
 
 /* Products */
 
-export const createTrip = (userId, token, trip) => {
-  console.log(trip, "EE")
+export const createTrip = (userId, token, requestBody) => {
+  console.log(requestBody, "EE")
   return fetch(`${API}/trip/create/${userId}`, {
     method: "POST",
     headers: {
@@ -63,7 +63,7 @@ export const createTrip = (userId, token, trip) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(trip),
+    body: JSON.stringify(requestBody),
     
   })
     .then((response) => {
@@ -84,8 +84,18 @@ export const getTripById = (tripId) => {
     .catch((err) => console.log(err));
 };
 
-export const getAllTrip = () => {
-  return fetch(`${API}/trips`, {
+export const getAllTrip = (page) => {
+  return fetch(`${API}/trips?page=${page}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const getEveryTrip = () => {
+  return fetch(`${API}/alltrips`, {
     method: "GET",
   })
     .then((response) => {
@@ -125,8 +135,8 @@ export const deleteTrip = (tripId, userId, token) => {
     .catch((err) => console.log(err));
 };
 
-export const bookTrip = (userId, token,  values) => {
-  console.log(values, "91")
+export const bookTrip = (userId, token,  requestBody) => {
+  console.log(requestBody, "91")
   console.log(token, "90")
   console.log(userId, "89")
   return fetch(`${API}/booking/${userId}`, {
@@ -136,7 +146,7 @@ export const bookTrip = (userId, token,  values) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(values),
+    body: JSON.stringify(requestBody),
   })
     .then((response) => {
       return response.json();

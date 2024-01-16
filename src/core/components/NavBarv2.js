@@ -20,6 +20,9 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { isAdmin } from '../../auth/helper/index';
 import { useNavigate } from "react-router-dom";
+import Button from '@mui/material/Button';
+import {signout, isAuthenticated} from "../../auth/helper/index"
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -72,6 +75,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState([
+    {name:"All Trips", url:"/user/userdashboard" },
     {name:" My Bookings", url:"/user/mybookings" },
     {name:" My Cancellations", url:"/user/mycancellations" },
     {name:" User request Solved", url:"/user/requestsolved" },
@@ -96,11 +100,29 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const handleLogout = () => {
+    if (isAuthenticated()) {
+      signout(() => {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      })
+    } else {
+      alert("You are not logged in!");
+    }
+  }
+
    const navigationItems = isAdmin() ? admin : user;
 
    const handleSubmit = (url) => {
     navigate(url)
    }
+
+   const getuserName = localStorage.getItem('user')
+   console.log(getuserName, "121")
+   const username = JSON.parse(getuserName)
+   console.log(username, "123")
+  //  const name = username.name
+  //  console.log(name, "125")
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -114,12 +136,16 @@ export default function PersistentDrawerLeft() {
             edge="start"
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >
+            
             <MenuIcon />
+            
           </IconButton>
           <Typography variant="h6" noWrap component="div">
           { isAdmin() ? 'Admin Dashboard' : 'User DashBoard' }
           </Typography>
+          <Button variant="outlined" color="inherit" style={{ position: 'absolute', right: 20, top: 20 }} onClick={handleLogout}>Logout</Button>
         </Toolbar>
+        
       </AppBar>
       <Drawer
         sx={{
@@ -134,6 +160,18 @@ export default function PersistentDrawerLeft() {
         anchor="left"
         open={open}
       >
+        
+          <div style={{ marginTop: '20px' }}>
+            {/* <p>Welcome, {name}</p> */}
+          <AccountCircle  sx={{
+            fontSize: 24,
+            
+          }}
+          />
+          </div>
+        
+        
+        
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Base from "../core/Base";
 import { isAuthenticated } from "../auth/helper";
-import { getAllTrip, deleteTrip, getAllCategories, getTripById, updateTrip } from "./helper/adminapicall";
+import { getAllTrip, deleteTrip, getAllCategories, getTripById, updateTrip , getEveryTrip} from "./helper/adminapicall";
 import { Link } from "react-router-dom";
 import { IconButton, FormControlLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -16,6 +16,10 @@ import {
   Button,
 } from '@mui/material';
 import { Select, MenuItem } from '@mui/material';
+import Navbar from "../core/components/NavBarv2"
+import {
+  Typography
+} from '@mui/material';
 
 const MatEdit = ({tripId, setTrips}) => {
   const { user, token } = isAuthenticated();
@@ -124,6 +128,7 @@ const MatEdit = ({tripId, setTrips}) => {
   const handleUpdate = (event) => {
     event.preventDefault();
     console.log("Updating trip with values:", values);
+    
     const requestBody = {
     name: values.name,
     category: values.category,
@@ -140,7 +145,7 @@ const MatEdit = ({tripId, setTrips}) => {
           setValues({...values, createdTrip: data, success: true});
           handleClose()
 
-          getAllTrip()
+          getEveryTrip()
           .then((updatedTrips) => {
             console.log("Updated Trips:", updatedTrips);
             setTrips(updatedTrips);
@@ -214,28 +219,7 @@ const MatEdit = ({tripId, setTrips}) => {
               // setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
               onChange={(event) => handleChange("trips_details")(event)}
           />
-          {/* <TextField
-              autoFocus
-              margin="dense"
-              required
-              fullWidth
-              // name="category"
-              id="Category"
-              label="Category"
-              select
-              value={values.category}
-              onChange={(e) => {
-                console.log('Changing value:', e.target.value);
-                setValues((prevValues) => ({ ...prevValues, category: e.target.value }))}}
-             
-            > */}
-              {/* Map through your category options and create MenuItem for each */}
-              {/* {categories.map((category, index) => (
-                <MenuItem key={index} value={category._id}>
-                  {category.name}
-                </MenuItem>
-              ))}
-            </TextField> */}
+         
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -250,7 +234,7 @@ const MatEdit = ({tripId, setTrips}) => {
     const [trips, setTrips] = useState([]);
   
     useEffect(() => {
-        getAllTrip()
+      getEveryTrip()
           .then((data) => {
           console.log(data, "TT")
           if (data.err) {
@@ -297,6 +281,7 @@ const MatEdit = ({tripId, setTrips}) => {
   
     return (
       <div
+      
         style={{
           display: "flex",
           justifyContent: "center",
@@ -306,8 +291,15 @@ const MatEdit = ({tripId, setTrips}) => {
         }}
       >
       <div style={{ height: 500, width: 500 }}>
+      <Typography variant="h5" align="center" gutterBottom >
+              Manage Trips
+            </Typography>
+            <Typography variant="body1" align="center" gutterBottom>
+              Make Changes to Trips here!
+            </Typography>
         <DataGrid rows={trips} columns={columns} pageSize={5} getRowId={(row) => row._id} />
       </div>
+      <Navbar/>
       </div>
     );
   };

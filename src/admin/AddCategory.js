@@ -19,6 +19,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from "react-router-dom"
 import { createCategory } from "./helper/adminapicall";
+import Navbar from "../core/components/NavBarv2"
 
 const AddCategory = () => {
   const defaultTheme = createTheme()
@@ -56,9 +57,11 @@ const AddCategory = () => {
   };
 
   return (
+   
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <Navbar/>
         {/* {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
 
           <Alert severity="success">{message} </Alert>
@@ -106,6 +109,9 @@ const AddCategory = () => {
         {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
+    
+    
+    
   ); 
 };
 

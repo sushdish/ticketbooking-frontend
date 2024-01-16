@@ -8,7 +8,7 @@ import {
     InputLabel,
 } from '@mui/material';
 
-const BookTrip = ({ tripDetails, BookTrip }) => {
+const BookTrip = ({ tripDetails, BookTrip, closeDialog }) => { 
     const [values, setValues] = useState({
         paymentReferenceNumber: "",
         booking_details: {
@@ -26,14 +26,14 @@ const BookTrip = ({ tripDetails, BookTrip }) => {
     const { seatType, travelClass, paymentType } = booking_details
 
     const handleCloseBookDialog = () => {
-
+        closeDialog()
     }
 
     const handleBookTrips = () => {
         BookTrip(values)
     }
 
-
+    // ...values.booking_details,
    
 
     const handleChange = (name) => (event) => {

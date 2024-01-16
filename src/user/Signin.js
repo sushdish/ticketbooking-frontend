@@ -58,6 +58,7 @@ const Signin = () => {
               setValues({...values, email: "", password: "", err: "", success: true, loading: true});
 
               navigate("/admin/admindashboard")
+              // navigate("/")
             } else {
               setValues({...values, email: "", password: "", err: "", success: true, loading: true});
 
@@ -151,99 +152,7 @@ const Signin = () => {
     </ThemeProvider>
   );
 
-  // const performRedirect = () => {
-  //   if (didRedirect) {
-  //     if (user && user.role === 1) {
-  //       return <navigate to="/admin/dashboard" />;
-  //     } else {
-  //       return <navigate to="/user/dashboard" />;
-  //     }
-  //   }
-
-  //   if (isAuthenticated) {
-  //     return <navigate to="/" />;
-  //   }
-  // };
-
-  // const signinForm = () => {
-  //   return (
-  //     <div className="row">
-  //       <form className="col-lg-6 col-md-8 col-sm-12">
-  //         <div className="form-group">
-  //           <label htmlFor="email" className="text-light">
-  //             Email
-  //           </label>
-  //           <input
-  //             type="email"
-  //             className="form-control"
-  //             name="email"
-  //             id="email"
-  //             value={email}
-  //             onChange={handleChange("email")}
-  //           />
-  //         </div>
-  //         <div className="form-group">
-  //           <label htmlFor="password" className="text-light">
-  //             Password
-  //           </label>
-  //           <input
-  //             type="password"
-  //             className="form-control"
-  //             name="password"
-  //             id="password"
-  //             value={password}
-  //             onChange={handleChange("password")}
-  //           />
-  //         </div>
-  //         <button
-  //           onClick={onSubmit}
-  //           type="submit"
-  //           className="btn btn-block btn-outline-success"
-  //         >
-  //           Sign In
-  //         </button>
-  //       </form>
-  //     </div>
-  //   );
-  // };
-
-  // const errorMessage = () => {
-  //   return (
-  //     <div className="row">
-  //       <div className="col col-lg-6 col-md-8 col-sm-12">
-  //         <div className="alert alert-dark">{err}</div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // const successMessage = () => {
-  //   return (
-  //     <div className="row">
-  //       <div className="col col-lg-6 col-md-8 col-sm-12">
-  //         <div className="alert alert-success">Signin success</div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // return (
-  //   <div>
-  //     <Base
-  //       title="Signin"
-  //       description="Signin to start shopping!"
-  //       className="container"
-  //     >
-
-  //     </Base>
-  //     {err && errorMessage()}
-  //     {loading && successMessage()}
-  //     {signinForm()}
-  //     {loading && performRedirect()}
-  //     <p className="text-white text-center">{JSON.stringify(values)}</p>
-  //   </div>
-
-  // );
+  
 };
 
 export default Signin;

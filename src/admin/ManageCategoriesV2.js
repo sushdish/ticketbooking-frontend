@@ -15,8 +15,12 @@ import {
   TextField,
   Button,
 } from '@mui/material';
+import Navbar from "../core/components/NavBarv2"
+import {
+  Typography
+} from '@mui/material';
 
-const MatEdit = ({categoryId, setCategories}) => {
+const MatEdit = ({ categoryId, setCategories }) => {
   const { user, token } = isAuthenticated();
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
@@ -25,30 +29,30 @@ const MatEdit = ({categoryId, setCategories}) => {
     success: "",
   })
 
-  const {name, err, success} = values
+  const { name, err, success } = values
 
-  const handleEditClick = () =>  {
+  const handleEditClick = () => {
     // console.log(categoryId, "2")
     console.log("Edit button clicked");
-   
-      getCategoryById(categoryId)
+
+    getCategoryById(categoryId)
       .then((data) => {
         console.log(data, "BB")
         if (data.err) {
-          setValues({...values, err: data.err});
+          setValues({ ...values, err: data.err });
         } else {
           setValues({ ...values, name: data.name || "" });
           setOpen(true);
         }
       })
-    
+
 
     setOpen(true)
   };
 
   const handleClose = () => {
     setOpen(false);
-    setValues({ ...values, success: false }); 
+    setValues({ ...values, success: false });
   };
 
   const handleUpdate = (event) => {
@@ -60,17 +64,17 @@ const MatEdit = ({categoryId, setCategories}) => {
         if (data.err) {
           setValues({ ...values, err: data.err, success: false });
         } else {
-          setValues({...values, name: "", success: true});
+          setValues({ ...values, name: "", success: true });
           handleClose()
 
           getAllCategories()
-          .then((updatedCategories) => {
-            console.log(updatedCategories, "4")
-            setCategories(updatedCategories);
-          })
-          .catch((error) => {
-            console.error('Error fetching categories:', error);
-          });
+            .then((updatedCategories) => {
+              console.log(updatedCategories, "4")
+              setCategories(updatedCategories);
+            })
+            .catch((error) => {
+              console.error('Error fetching categories:', error);
+            });
         }
       })
       .catch((err) => {
@@ -79,18 +83,20 @@ const MatEdit = ({categoryId, setCategories}) => {
   }
   return (
     <>
-    <FormControlLabel
-      control={
-        <IconButton
-          color="secondary"
-          aria-label="add an alarm"
-          onClick={handleEditClick}
-        >
-          <EditIcon style={{ color: blue[500] }} />
-        </IconButton>
-      }
-    />
-    <Dialog open={open} onClose={handleClose}>
+
+      <FormControlLabel
+        control={
+          <IconButton
+            color="secondary"
+            aria-label="add an alarm"
+            onClick={handleEditClick}
+          >
+            <EditIcon style={{ color: blue[500] }} />
+          </IconButton>
+        }
+      />
+
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update Category here!</DialogTitle>
         <DialogContent>
           <TextField
@@ -105,7 +111,8 @@ const MatEdit = ({categoryId, setCategories}) => {
             value={values.name}
             onChange={(e) => {
               console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, name: e.target.value }))}}
+              setValues((prevValues) => ({ ...prevValues, name: e.target.value }))
+            }}
           />
         </DialogContent>
         <DialogActions>
@@ -113,79 +120,10 @@ const MatEdit = ({categoryId, setCategories}) => {
           <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
-      </>
+
+    </>
   );
 };
-
-
-//   const onSubmit = (event) => {
-//     console.log("Form submitted");
-//     event.preventDefault();
-
-//     const requestBody = {
-//       name: values.name
-//     }
-
-//     updateCategory(categoryId, user._id, token, requestBody)
-//     .then((data) => {
-//       console.log("Update response:", data);
-//         if (data.err) {
-//           setValues({
-//             ...values,
-//             loading: false,
-//             err: data.err,
-//             success: false,
-//           });
-//         } else {
-//           setValues({
-//             ...values,
-//             loading: false,
-//             success: true,
-//             name: ""
-//           });
-//           loadAllCategories();
-//         }
-//       });
-      
-//   };
-//   console.log("Render");
-
-//   return (
-//     <>
-//       {categories.map((category, index) => (
-//         <FormControlLabel
-//           key={index}
-//           control={
-//             <IconButton
-//               color="secondary"
-//               aria-label="edit category"
-//               onClick={() => handleEditClick(category._id)}
-//             >
-//               <EditIcon style={{ color: blue[500] }} />
-//             </IconButton>
-//           }
-//         />
-//       ))}
-//       {/* Display the Update form for editing */}
-//       {values.name && (
-//         <>
-//           <input
-//             type="text"
-//             value={values.name}
-//             onChange={(e) =>
-//               setValues({ ...values, name: e.target.value })
-//             }
-//           />
-//           <button onClick={() => onSubmit(categoryId)}>
-//             Update
-//           </button>
-//         </>
-//       )}
-//       <Demo/>
-//     </>
-//   );
-
-
 
 const Demo = () => {
   const [categories, setCategories] = useState([]);
@@ -218,20 +156,22 @@ const Demo = () => {
       width: 140,
       disableClickEventBubbling: true,
       renderCell: (params) => {
-        
-        
+
+
         return (
           <div
             className="d-flex justify-content-between align-items-center"
             style={{ cursor: "pointer" }}
           >
-            
+
             <MatEdit categoryId={params.row._id} setCategories={handleUpdateCategories} />
+
           </div>
+
         )
       },
     },
-  ];  
+  ];
 
 
   return (
@@ -241,12 +181,20 @@ const Demo = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh", // Set the height of the container to the full viewport height
-        backgroundColor: "#fff", 
+        backgroundColor: "#fff",
       }}
     >
-    <div style={{ height: 500, width: 500 }}>
-      <DataGrid rows={categories} columns={columns} pageSize={5} getRowId={(row) => row._id} />
-    </div>
+      <div style={{ height: 500, width: 500 }}>
+      <Typography variant="h5" align="center" gutterBottom >
+              Manage Categories
+            </Typography>
+            <Typography variant="body1" align="center" gutterBottom>
+              Make Changes to Categories here!
+            </Typography>
+        <DataGrid rows={categories} columns={columns} pageSize={5} getRowId={(row) => row._id} />
+
+      </div>
+      <Navbar/>
     </div>
   );
 };

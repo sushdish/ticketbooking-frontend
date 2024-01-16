@@ -161,10 +161,7 @@ const Signup = () => {
             id="contact"
             autoComplete="contact"
           />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
+            
             <Button
               type="submit"
               fullWidth
@@ -174,11 +171,7 @@ const Signup = () => {
               Sign Up
             </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
+              
               <Grid item >
                 <Link href="/signin" variant="body2">
                   Don't have an account? Sign Up
@@ -186,13 +179,7 @@ const Signup = () => {
               </Grid>
 
             </Grid>
-            {/* <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/signin" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid> */}
+            
           </Box>
         </Box>
         {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
@@ -200,57 +187,6 @@ const Signup = () => {
     </ThemeProvider>
     );
   };
-  // ? err : "Please fill out all fields correctly."
-
-  // const erroronSubmit = () => {
-  //   return (
-  //     <div className="row">
-  //       <div className="col col-lg-6 col-md-8 col-sm-12 "
-  //          style={{
-  //           display: 'flex',
-  //           flexDirection: 'column',
-  //           alignItems: 'center',
-  //           justifyContent: 'center'
-  //         }}
-  //       >
-  //         <div className="alert alert-dark">{err}</div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // const successonSubmit = () => {
-  //   return (
-  //     <div className="row">
-  //       <div className="col col-lg-6 col-md-8 col-sm-12"
-  //          style={{
-  //           display: 'flex',
-  //           flexDirection: 'column',
-  //           alignItems: 'center',
-  //           justifyContent: 'center'
-  //         }}
-  //       >
-  //         <div className="alert alert-success">
-  //           Successfully sign Up , please{" "}
-  //           <Link className="alert-link" to="/signin">
-  //             Signin
-  //           </Link>{" "}
-  //           here
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-//   return (
-//     <div>
-//       <Base title="Signup" description="Signup to explore!" className="container">
-//       </Base>
-//         {err && erroronSubmit()}
-//         {success && successonSubmit()}
-//         {signupForm()}
-//     </div>
-//   );
-// };
+ 
 
 export default Signup;

@@ -8,7 +8,17 @@ const AdminDashBoard = () => {
     user: { name, email, role },
   } = isAuthenticated();
 
-
+  const middleSide = () => {
+    return (
+      <div>
+        <li>
+          <Link to = "/" className="text-success">
+            Book Trip
+          </Link>
+        </li>
+      </div>
+    )
+  }
 
   const adminLeftSide = () => {
     return (
@@ -84,6 +94,7 @@ const AdminDashBoard = () => {
       <div className="row">
         <div className="col-sm-12 col-md-3">{adminLeftSide()}</div>
         <div className="col-sm-12 col-md-9">{adminRightSide()}</div>
+        <div className="col-sm-12 col-md-9">{middleSide()}</div>
       </div>
     </Base>
   );

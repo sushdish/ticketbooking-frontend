@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../styles.css";
 import Base from "./Base";
-import Card from "./components/Card";
+
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
-// import Box from '@mui/material/Box';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
-// import Grid from '@mui/material/Grid';
 import BookingStepper from '../core/components/BookingStepper'
 import TextField from '@mui/material/TextField';
 import { getAllTrip, bookTrip } from "../admin/helper/adminapicall";
@@ -19,6 +17,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from "react-router-dom";
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
 import {
   Typography, Select,
   MenuItem,
@@ -26,11 +26,14 @@ import {
   InputLabel,
 } from '@mui/material';
 import { isAuthenticated } from '../auth/helper/index';
+import TablePagination from '@mui/material/TablePagination';
 import BookTripDialog from "../user/Bookings/BookTrip";
 
 const Home = () => {
 
   const navigate = useNavigate();
+
+  const [page , setPage] = useState(0)
 
   const { user, token } = isAuthenticated();
   const [trips, setTrips] = useState([]);
@@ -55,7 +58,7 @@ const Home = () => {
 
 
   const preloadProducts = () => {
-    getAllTrip().then((data) => {
+    getAllTrip(page).then((data) => {
       if (data.err) {
         console.log(data.err);
       } else {
@@ -124,47 +127,70 @@ const Home = () => {
     // Further Create the Trip From Here
 
 
+    setValues({ ...values, err: false, loading: true });
+    if (!selectedTrip || !selectedTrip.trips_details) {
+      console.error("Invalid selectedTrip or missing trips_details");
+      return;
+    }
     // setValues({ ...values, err: false, loading: true });
-    // if (!selectedTrip || !selectedTrip.trips_details) {
-    //   console.error("Invalid selectedTrip or missing trips_details");
-    //   return;
-    // }
-    // // setValues({ ...values, err: false, loading: true });
 
-    // const requestBody = {
-    //   tripId: selectedTrip._id,
-    //   paymentReferenceNumber: values.paymentReferenceNumber,
-    //   paymentType: values.booking_details.paymentType,
-    //   travelClass: values.booking_details.travelClass,
-    //   seatType: values.booking_details.seatType,
-    // };
+    const requestBody = {
+      tripId: selectedTrip._id,
+      paymentReferenceNumber: tripDetails.paymentReferenceNumber,
+      paymentType: tripDetails.booking_details.paymentType,
+      travelClass: tripDetails.booking_details.travelClass,
+      seatType: tripDetails.booking_details.seatType,
+    };
 
+    console.log(requestBody, 'Request Body');
 
-    // bookTrip(user._id, token, requestBody)
-    //   .then((data) => {
-    //     console.log(data, "86")
-    //     if (data.err) {
-    //       setValues({ ...values, err: data.err, loading: false });
-    //     } else {
-    //       setValues({
-    //         ...values,
-    //         paymentReferenceNumber: "",
-    //         booking_details: {
-    //           seatType: "",
-    //           travelClass: "",
-    //           paymentType: "",
-    //         },
-    //         createdBook: data,
-    //         loading: false,
-    //         err: "",
-    //       });
-    //       setBookDialogOpen(false);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    bookTrip(user._id, token, requestBody)
+      .then((data) => {
+        console.log(data, "86")
+        console.log(requestBody, "55")
+        if (data.err) {
+          setValues({ ...values, err: data.err, loading: false });
+        } else {
+          setValues({
+            ...values,
+            paymentReferenceNumber: "",
+            booking_details: {
+              seatType: "",
+              travelClass: "",
+              paymentType: "",
+            },
+            createdBook: data,
+            loading: false,
+            err: "",
+          });
+          setBookDialogOpen(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+  const handlePagination = async (event , newPage) => {
+    setPage(newPage)
+    event.preventDefault()
+
+    await getAllTrip(newPage + 1).then((data) => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        setTrips(data);
+      }
+    })
+      .catch((error) => {
+        console.error("Error fetching trip data:", error);
+        // setError("Error fetching trip data");
+      });
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+  
+  };
 
 
   return (
@@ -217,6 +243,15 @@ const Home = () => {
           </Table>
         </TableContainer>
 
+        <TablePagination
+      component="div"
+      count={10}
+      page={page}
+      onPageChange={handlePagination}
+      rowsPerPage={5}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+    />
+
         {/* Dialog to display trip details */}
         <Dialog open={isViewDialogOpen} onClose={handleCloseViewDialog}>
           <DialogTitle>Trip Details</DialogTitle>
@@ -251,7 +286,7 @@ const Home = () => {
 
 
         <Dialog open={isBookDialogOpen} onClose={handleCloseBookDialog} >
-        <BookTripDialog tripDetails={selectedTrip.trips_details} BookTrip={BookUsertrip} />
+        <BookTripDialog tripDetails={selectedTrip.trips_details} BookTrip={BookUsertrip} closeDialog={ () => (setBookDialogOpen(false))} />
         </Dialog>
       </div>
     </>
@@ -259,15 +294,3 @@ const Home = () => {
 };
 
 export default Home;
-{/* <FormControl fullWidth>
-<InputLabel id="seat-type-label">Seat Type</InputLabel>
-<Select labelId="seat-type-label" id="seat-type" value={values.booking_details.seatType} 
-  onChange={(event) => handleChange("booking_details")(event)}
->
-  {trips.map((seatType , index) => (
-    <MenuItem key={index} value={seatType}>
-      {seatType}
-    </MenuItem>
-  ))}
-</Select>
-</FormControl> */}

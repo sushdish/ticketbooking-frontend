@@ -14,13 +14,13 @@ import AddCategory from "./admin/AddCategory";
 import ManageCategories from "./admin/ManageCategories";
 import ManageCategoriesV2 from "./admin/ManageCategoriesV2";
 import UpdateCategory from "./admin/UpdateCategory";
-import AddProduct from "./admin/AddProduct";
-import ManageProducts from "./admin/ManageProducts";
+import AddTrips from "./admin/AddTrips";
+import ManageTrips from "./admin/ManageTripsV2";
 import UpdateProduct from "./admin/UpdateProduct";
 import BookingModal from './core/components/BookingModal';
 import Card from './core/components/Card';
-import MyBookings from './core/components/MyBookings';
-import MyCancellations from './core/components/Cancellation'
+import MyBookings from './core/components/MyBookingV2';
+import Cancellations from './core/components/CancellationsV2'
 import AdminCancellations from "./admin/AdminCancellations";
 import RequestSolved from "./core/components/ResolvedQuery";
 import AdminSolvedReq from "./admin/AdminAllSolvedReq";
@@ -36,11 +36,18 @@ const App = () => {
 
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/booking-modal" element={<BookingModal />} />
+        
 
         <Route element={<PrivateRoute />}>
           <Route path="/user/userdashboard" element={<UserDashBoard />} />
+        </Route>
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user/mybookings" element={<MyBookings />} />
+        </Route>
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user/mycancellations" element={<Cancellations />} />
         </Route>
 
         <Route element={<AdminRoute />}>
@@ -52,15 +59,15 @@ const App = () => {
         </Route>
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin/categories/:categoryId" element={<ManageCategories />} />
+          <Route path="/admin/categories/:categoryId" element={<ManageCategoriesV2 />} />
         </Route>
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin/create/product" element={<AddProduct />} />
+          <Route path="/admin/create/trips" element={<AddTrips />} />
         </Route>
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin/product/update/:productId" element={<ManageProducts />} />
+          <Route path="/admin/trips/update/:productId" element={<ManageTrips />} />
         </Route>
 
 

@@ -15,6 +15,9 @@ import {
   TextField,
   Button,
 } from '@mui/material';
+import Navbar from "../core/components/NavBarv2"
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 const MatEdit = ({categoryId, setCategories}) => {
   const { user, token } = isAuthenticated();
@@ -79,6 +82,7 @@ const MatEdit = ({categoryId, setCategories}) => {
   }
   return (
     <>
+    
     <FormControlLabel
       control={
         <IconButton
@@ -118,72 +122,6 @@ const MatEdit = ({categoryId, setCategories}) => {
 };
 
 
-//   const onSubmit = (event) => {
-//     console.log("Form submitted");
-//     event.preventDefault();
-
-//     const requestBody = {
-//       name: values.name
-//     }
-
-//     updateCategory(categoryId, user._id, token, requestBody)
-//     .then((data) => {
-//       console.log("Update response:", data);
-//         if (data.err) {
-//           setValues({
-//             ...values,
-//             loading: false,
-//             err: data.err,
-//             success: false,
-//           });
-//         } else {
-//           setValues({
-//             ...values,
-//             loading: false,
-//             success: true,
-//             name: ""
-//           });
-//           loadAllCategories();
-//         }
-//       });
-      
-//   };
-//   console.log("Render");
-
-//   return (
-//     <>
-//       {categories.map((category, index) => (
-//         <FormControlLabel
-//           key={index}
-//           control={
-//             <IconButton
-//               color="secondary"
-//               aria-label="edit category"
-//               onClick={() => handleEditClick(category._id)}
-//             >
-//               <EditIcon style={{ color: blue[500] }} />
-//             </IconButton>
-//           }
-//         />
-//       ))}
-//       {/* Display the Update form for editing */}
-//       {values.name && (
-//         <>
-//           <input
-//             type="text"
-//             value={values.name}
-//             onChange={(e) =>
-//               setValues({ ...values, name: e.target.value })
-//             }
-//           />
-//           <button onClick={() => onSubmit(categoryId)}>
-//             Update
-//           </button>
-//         </>
-//       )}
-//       <Demo/>
-//     </>
-//   );
 
 
 
@@ -235,6 +173,7 @@ const Demo = () => {
 
 
   return (
+    
     <div
       style={{
         display: "flex",
@@ -247,6 +186,8 @@ const Demo = () => {
     <div style={{ height: 500, width: 500 }}>
       <DataGrid rows={categories} columns={columns} pageSize={5} getRowId={(row) => row._id} />
     </div>
+    
+    <Navbar/>
     </div>
   );
 };

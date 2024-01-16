@@ -31,9 +31,6 @@ import Navbar from "../core/components/NavBarv2"
 const AddProduct = () => {
   const defaultTheme = createTheme()
   const { user, token } = isAuthenticated();
-
-
-
   const [startTime, setStartTime] = useState(dayjs(Date.now()));
   const [endTime, setEndTime] = useState(dayjs(Date.now()))
 

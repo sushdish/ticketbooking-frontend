@@ -20,6 +20,7 @@ export const createCategory = (userId, token, category) => {
 };
 
 export const getCategoryById = (categoryId) => {
+  console.log(categoryId, "1")
   return fetch(`${API}/category/${categoryId}`, {
     method: "GET",
   })
@@ -37,7 +38,7 @@ export const getAllCategories = () => {
     .catch((err) => console.log(err));
 };
 
-export const updateCategory = (categoryId, userId, token, category) => {
+export const updateCategory = (categoryId, userId, token, requestBody) => {
   return fetch(`${API}/category/${categoryId}/${userId}`, {
     method: "PUT",
     headers: {
@@ -45,7 +46,7 @@ export const updateCategory = (categoryId, userId, token, category) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(category),
+    body: JSON.stringify(requestBody),
   })
     .then((response) => response.json())
     .catch((err) => console.log(err));
@@ -93,15 +94,15 @@ export const getAllTrip = () => {
     .catch((err) => console.log(err));
 };
 
-export const updateTrip = (tripId, userId, token, trip) => {
-  console.log(tripId, "97")
+export const updateTrip = (tripId, userId, token, requestBody) => {
+  console.log(requestBody, "97")
   return fetch(`${API}/trip/${tripId}/${userId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(trip),
+    body: JSON.stringify(requestBody),
   })
     .then((response) => {
       return response.json();

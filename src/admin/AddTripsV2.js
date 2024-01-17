@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Base from "../core/Base";
 import { getAllCategories, createTrip } from "./helper/adminapicall";
 import { isAuthenticated } from "../auth/helper";
 import { Spinner } from "react-bootstrap";

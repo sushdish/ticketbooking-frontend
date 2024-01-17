@@ -84,7 +84,7 @@ export default function PersistentDrawerLeft() {
   const [admin, setAdmin] = React.useState([
     {name:"Create Categories", url:"/admin/create/category" },
     {name:"Manage Categories", url:"/admin/categories/:categoryId"},
-    {name:"Create Products", url:"/admin/create/trips"},
+    {name:"Create Products", url:"/admin/create/product"},
     {name:"Manage Products", url:"/admin/trips/update/:productId"},
     {name:"User Cancellation Request", url:"/admin/cancellation/update"},
     {name:"Solved Cancellation Record", url:"/admin/cancellation/adminsolved"},

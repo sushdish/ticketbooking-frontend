@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Base from "../core/Base";
-import { Link } from "react-router-dom";
 import { IconButton, FormControlLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';

@@ -8,7 +8,7 @@ import {
     InputLabel,
 } from '@mui/material';
 
-const AdminReply = ({AdminReply}) => {
+const AdminReply = ({AdminReply , CancelBox}) => {
 
     const [values, setValues] = useState({
         adminReason: "",
@@ -24,7 +24,7 @@ const AdminReply = ({AdminReply}) => {
       const {amount, created} = refunds
 
       const handleCloseBookDialog = () => {
-
+        CancelBox()
       }
   
       const handleCancelBook = () => {

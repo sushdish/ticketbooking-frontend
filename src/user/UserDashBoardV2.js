@@ -3,19 +3,10 @@ import Base from "../core/Base";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth/helper";
 
-import HomeV2 from "../core/Homev2"
-
-import Home from "../core/Homev2"
-
+import HomeV2 from "../core/HomeNewV2"
 
 const UserDashBoard = () => {
  
-
-
-
- 
-
-
   return (
     <div>
 

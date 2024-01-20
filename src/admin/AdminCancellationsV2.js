@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { getPendingCancellations, adminReason , refund} from "../admin/helper/adminapicall";
+import { getPendingCancellations, adminReason , refund, pigination} from "../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,6 +23,7 @@ import { isAuthenticated } from '../auth/helper/index';
 import { useNavigate } from "react-router-dom";
 import Reply from "../admin/AdminReply"
 import Navbar from "../core/components/NavBarv2"
+import TablePagination from '@mui/material/TablePagination';
 
 const AdminCancellationsV2 = () => {
 
@@ -44,10 +45,14 @@ const AdminCancellationsV2 = () => {
       const {userReason, createdData} = values
       const {amount, created} = refunds
 
+      const [page , setPage] = useState(0)
+
       const navigate = useNavigate()
 
       const preload = () => {
-        getPendingCancellations(user._id, token).then((data) => {
+        pigination(page)
+        getPendingCancellations(user._id, token)
+        .then((data) => {
             console.log(data, "YY")  //bookingId is in form of _id
           if (data.err) {
             console.log(data.err);
@@ -60,6 +65,27 @@ const AdminCancellationsV2 = () => {
       useEffect(() => {
         preload();
       }, []);
+
+      const handlePagination = async (event , newPage) => {
+        setPage(newPage)
+        event.preventDefault()
+    
+        await pigination(newPage + 1).then((data) => {
+          if (data.err) {
+            console.log(data.err);
+          } else {
+            setPendings(data);
+          }
+        })
+          .catch((error) => {
+            console.error("Error fetching trip data:", error);
+            // setError("Error fetching trip data");
+          });
+      }
+
+      const handleChangeRowsPerPage = (event) => {
+  
+      };
 
       const handleViewButtonClick = (selectedRow) => {
         setSelectedRequest(selectedRow)
@@ -125,6 +151,14 @@ const AdminCancellationsV2 = () => {
                     amount: "",
                     created: "",
                   });
+
+                  getPendingCancellations(user._id, token).then((data) =>{
+                    if (data.err) {
+                      console.log(data.err);
+                    } else {
+                      setPendings(data);
+                    }
+                  })
                  
                   setApproveDialogOpen(false);
 
@@ -183,6 +217,15 @@ const AdminCancellationsV2 = () => {
         </Table>
         </TableContainer>
 
+        <TablePagination
+      component="div"
+      count={10}
+      page={page}
+      onPageChange={handlePagination}
+      rowsPerPage={5}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+    />
+
         {/* Dialoge code to display view Booking details */}
 
         <Dialog open={isViewDialogOpen} onClose={handleCloseViewDialoge}>
@@ -210,7 +253,7 @@ const AdminCancellationsV2 = () => {
         </Dialog>
 
         <Dialog open={isApproveDialogOpen} onClose={handleCloseViewDialoge} >
-        <Reply  AdminReply={AcceptRequest} />
+        <Reply  CancelBox={() => (setApproveDialogOpen(false))} AdminReply={AcceptRequest} />
         </Dialog>
 
       </div>

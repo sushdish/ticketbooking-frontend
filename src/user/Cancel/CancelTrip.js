@@ -8,7 +8,7 @@ import {
     InputLabel,
 } from '@mui/material';
 
-const CancelTrip = ({  CancelTrip }) => {
+const CancelTrip = ({  CancelTrip , CancelBox}) => {
     const [values, setValues] = useState({
         userReason: "",
         createdData: "",
@@ -18,7 +18,7 @@ const CancelTrip = ({  CancelTrip }) => {
 
    
     const handleCloseDialog = () => {
-
+        CancelBox(  )
     }
 
     const handleCancelTrips = () => {
@@ -43,9 +43,9 @@ const CancelTrip = ({  CancelTrip }) => {
                 
                 <div style={{ textAlign: 'center' }}>
                     <FormControl fullWidth style={{ margin: '15px', width: '300px' }}>
-                        <InputLabel id="userReason">User Reason</InputLabel>
+                        {/* <InputLabel id="userReason">User Reason</InputLabel> */}
                         <TextField
-                            labelId="userReason"
+                            label="UserReason"
                             id="userReason"
                             value={userReason}
                             onChange={handleChange('userReason')}

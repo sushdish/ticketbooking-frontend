@@ -4,7 +4,7 @@ import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } 
 import Paper from '@mui/material/Paper';
 // import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { getAllBookings, cancellation } from "../../admin/helper/adminapicall";
+import { getAllBookings, cancellation, getPigination } from "../../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,6 +22,7 @@ import {
 import { isAuthenticated } from '../../auth/helper/index';
 import Cancel from "../../user/Cancel/CancelTrip"
 import Navbar from "../../core/components/NavBarv2"
+import TablePagination from '@mui/material/TablePagination';
 
 const MyBookings = () => {
 
@@ -37,9 +38,12 @@ const MyBookings = () => {
     createdData: "",
   });
 
+  const [page , setPage] = useState(0)
+
   const {userReason, createdData} = values
 
   const preloadBookings = () => {
+    getPigination(page)
     getAllBookings(user._id, token).then((data) => {
       if (data.err) {
         console.log(data.err);
@@ -56,6 +60,27 @@ const MyBookings = () => {
   useEffect(() => {
     preloadBookings();
   }, []);
+
+  const handlePagination = async (event , newPage) => {
+    setPage(newPage)
+    event.preventDefault()
+
+    await getPigination(newPage + 1).then((data) => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        setBookings(data);
+      }
+    })
+      .catch((error) => {
+        console.error("Error fetching trip data:", error);
+        // setError("Error fetching trip data");
+      });
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+
+  };
 
   const handleViewButtonClick = (selectedRow) => {
     setSelectedTrip(selectedRow);
@@ -182,6 +207,15 @@ const MyBookings = () => {
           </Table>
         </TableContainer>
 
+        <TablePagination
+      component="div"
+      count={10}
+      page={page}
+      onPageChange={handlePagination}
+      rowsPerPage={5}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+    />
+
         {/* Dialog to display trip details */}
         <Dialog open={isViewDialogOpen} onClose={handleCloseViewDialog}>
           <DialogTitle>Trip Details</DialogTitle>
@@ -207,7 +241,7 @@ const MyBookings = () => {
 
 
         <Dialog open={isCancelDialogOpen} onClose={handleCloseBookDialog} >
-        <Cancel CancelTrip={CancelUsertrip} />
+        <Cancel CancelBox={() => (setCancelDialogOpen(false))}CancelTrip={CancelUsertrip} />
         </Dialog>
       </div>
     </>

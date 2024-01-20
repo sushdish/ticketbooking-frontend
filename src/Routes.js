@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Homev2 from "./core/HomeNewV2";
 import Signin from "./user/Signin";
@@ -9,17 +9,15 @@ import PrivateRoute from "./auth/helper/PrivateRoute";
 import AdminRoute from "./auth/helper/AdminRoute";
 import AddCategory from "./admin/AddCategory";
 import AddTrips from "./admin/AddTripsV2";
-import MyBookingsV2 from './core/components/MyBookingsV2';
+import MyBookingsV2 from "./core/components/MyBookingV2";
 import MyCancellations from './core/components/CancellationV2'
-// import AdminCancellations from "./admin/AdminCancellationsV2";
 import RequestSolved from "./core/components/ResolvedQueryV2";
 import AdminSolvedReq from "./admin/AdminAllSolvedReqV2";
 import ManageCategoriesV2 from "./admin/ManageCategoriesNewV2";
 import ManageTrips from "./admin/ManageTripsV2";
 import Cancellations from './core/components/CancellationsV2'
 import AdminCancellations from "./admin/AdminCancellationsV2";
-// import RequestSolved from "./core/components/ResolvedQuery";
-// import AdminSolvedReq from "./admin/AdminAllSolvedReq";
+
 
 const App = () => {
   return (
@@ -31,16 +29,12 @@ const App = () => {
         <Route path="/signin" element={<Signin />} />
         
 
-
-
-
         <Route element={<PrivateRoute />}>
           <Route path="/user/userdashboard" element={<UserDashBoard />} />
         </Route>
 
-        <Route element={<PrivateRoute />}>
-
-          <Route path="/user/mybookings"  element={<MyBookingsV2 />} />
+        <Route element={<PrivateRoute/>}>
+          <Route path="/user/mybookings" element={<MyBookingsV2 />} />
         </Route>
 
         
@@ -68,12 +62,11 @@ const App = () => {
         </Route>
 
         <Route element={<AdminRoute />}>
-
-          <Route path="/admin/create/product" element={<AddTrips />} />
+          <Route path="/admin/create/trips" element={<AddTrips />} />
         </Route>
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin/product/update/:productId" element={<ManageTrips />} />
+          <Route path="/admin/trips/update/:productId" element={<ManageTrips />} />
         </Route>
 
         

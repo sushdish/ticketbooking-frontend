@@ -17,9 +17,7 @@
 // } from '@mui/material';
 // import Navbar from "../core/components/NavBarv2"
 
-// import {
-//   Typography
-// } from '@mui/material';
+ 
 
 // import { Typography } from '@mui/material';
 // import Grid from '@mui/material/Grid';
@@ -208,12 +206,7 @@
 //       </div>
 //       <Navbar/>
 
-//     <div style={{ height: 500, width: 500 }}>
-//       <DataGrid rows={categories} columns={columns} pageSize={5} getRowId={(row) => row._id} />
-//     </div>
-    
-//     <Navbar/>
-
+   
 //     </div>
 //   );
 // };

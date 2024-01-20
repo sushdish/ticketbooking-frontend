@@ -82,10 +82,11 @@ export default function PersistentDrawerLeft() {
   ])
 
   const [admin, setAdmin] = React.useState([
+    {name: "All Trips" , url: "/admin/admindashboard"},
     {name:"Create Categories", url:"/admin/create/category" },
     {name:"Manage Categories", url:"/admin/categories/:categoryId"},
-    {name:"Create Products", url:"/admin/create/product"},
-    {name:"Manage Products", url:"/admin/trips/update/:productId"},
+    {name:"Create Trips", url:"/admin/create/trips"},
+    {name:"Manage Trips", url:"/admin/trips/update/:productId"},
     {name:"User Cancellation Request", url:"/admin/cancellation/update"},
     {name:"Solved Cancellation Record", url:"/admin/cancellation/adminsolved"},
   ])
@@ -117,10 +118,10 @@ export default function PersistentDrawerLeft() {
     navigate(url)
    }
 
-   const getuserName = localStorage.getItem('user')
-   console.log(getuserName, "121")
-   const username = JSON.parse(getuserName)
-   console.log(username, "123")
+  //  const getuserName = localStorage.getItem('user')
+  //  console.log(getuserName, "121")
+  //  const username = JSON.parse(getuserName)
+  //  console.log(username, "123")
   //  const name = username.name
   //  console.log(name, "125")
 

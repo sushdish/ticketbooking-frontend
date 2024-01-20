@@ -3,7 +3,7 @@ import { IconButton, FormControlLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { blue } from '@mui/material/colors';
-import { getAllTrip, updateTrip, getTripById } from "./helper/adminapicall";
+import { getAllTrip, updateTrip, getTripById , getEveryTrip} from "./helper/adminapicall";
 import { isAuthenticated } from "../auth/helper/index";
 import {
   DialogActions,
@@ -40,7 +40,7 @@ const MatEdit = ({tripId, setTrips}) => {
     },
     loading: false,
     err: "",
-    success:"",
+    success:false,
     message: "",
     createdTrip: "",
   })
@@ -62,17 +62,17 @@ const MatEdit = ({tripId, setTrips}) => {
             tripNumber: data.tripNumber, 
             trips_details: {
               DestinationA: data.trips_details.DestinationA,
-              DestinationB: data.DestinationB,
-              SeatCount: data.SeatCount,
-              StartTime: data.StartTime,
-              EndTime: data.EndTime,
-              BaggageAllowance: data.BaggageAllowance,
-              TicketAmount: data.TicketAmount,
-              SeatType: data.SeatType,
-              TravelClass: data.TravelClass,
-              Currency: data.Currency,
-              PaymentType: data.PaymentType,
-              RewardPoints: data.RewardPoints,
+              DestinationB: data.trips_details.DestinationB,
+              SeatCount: data.trips_details.SeatCount,
+              StartTime: data.trips_details.StartTime,
+              EndTime: data.trips_details.EndTime,
+              BaggageAllowance: data.trips_details.BaggageAllowance,
+              TicketAmount: data.trips_details.TicketAmount,
+              SeatType: data.trips_details.SeatType,
+              TravelClass: data.trips_details.TravelClass,
+              Currency: data.trips_details.Currency,
+              PaymentType: data.trips_details.PaymentType,
+              RewardPoints: data.trips_details.RewardPoints,
             },
             loading: false,
             err: false,});
@@ -82,33 +82,59 @@ const MatEdit = ({tripId, setTrips}) => {
       })
     
 
-    setOpen(true)
+    // setOpen(true)
   };
+
+  const handleChange = (name) => (event) => {
+    // const value = event.target.value;
+
+    console.log(event, "83")
+    console.log(name, "84")
+
+    if (name === 'trips_details') {
+
+      const tripsDetails = { ...values.trips_details, [name]: event.target.value };
+      setValues({ ...values, trips_details: tripsDetails });
+    } else {
+      setValues({ ...values, [name]: event.target.value });
+
+      console.log(values, "90")
+
+    
+  };
+}
 
   const handleClose = () => {
     setOpen(false);
     setValues({ ...values, success: false }); 
   };
 
-  const handleUpdate = (event) => {
-    event.preventDefault();
+  
+
+  const handleUpdate = () => {
+    // event.preventDefault();
     const requestBody = {
         name: values.name,
         category: values.category,
         tripNumber: values.tripNumber,
         trips_details: values.trips_details,
         }
-    setValues({ ...values, err: false });
+        console.log(requestBody, "77")
+
+    // setValues({ ...values, err: false });
     updateTrip(tripId, user._id, token, requestBody)
       .then((data) => {
         console.log(data, "3")
         if (data.err) {
           setValues({ ...values, err: data.err, success: false });
         } else {
-          setValues({...values, createdTrip: data, success: true});
+          setValues({...values, name: data.name,
+            success: true
+          });
+          console.log(name, "99")
           handleClose()
 
-          getAllTrip()
+          getEveryTrip()
           .then((updatedCategories) => {
             console.log(updatedCategories, "4")
             setTrips(updatedCategories);
@@ -149,9 +175,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.name}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, name: e.target.value }))}}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, name: e.target.value }))}}
+            onChange={handleChange("name")}
           />
           <TextField
             autoFocus
@@ -163,9 +190,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.tripNumber}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, tripNumber: e.target.value }))}}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, tripNumber: e.target.value }))}}
+            onChange={handleChange("tripNumber")}
           />
           <TextField
             autoFocus
@@ -177,10 +205,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.DestinationA}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -192,10 +220,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.DestinationB}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, DestinationB: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -207,10 +235,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.StartTime}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, StartTime: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
            <TextField
             autoFocus
@@ -222,10 +250,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.EndTime}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, EndTime: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -237,10 +265,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.BaggageAllowance}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, BaggageAllowance: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -252,10 +280,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.TicketAmount}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, TicketAmount: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -267,10 +295,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.Currency}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, Currency: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -282,10 +310,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.SeatCount}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, SeatCount: e.target.value }))}}
+              onChange={(SeatCount) => handleChange("trips_details")(SeatCount)}
           />
           <TextField
             autoFocus
@@ -297,10 +325,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.SeatType}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, SeatType: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -312,10 +340,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.TravelClass}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, TravelClass: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -327,10 +355,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.PaymentType}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, PaymentType: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
           <TextField
             autoFocus
@@ -342,10 +370,10 @@ const MatEdit = ({tripId, setTrips}) => {
             fullWidth
             variant="standard"
             value={values.trips_details.RewardPoints}
-            onChange={(e) => {
-              console.log('Changing value:', e.target.value);
-              setValues((prevValues) => ({ ...prevValues, DestinationA: e.target.value }))}}
-            //   onChange={(event) => handleChange("trips_details")(event)}
+            // onChange={(e) => {
+            //   console.log('Changing value:', e.target.value);
+            //   setValues((prevValues) => ({ ...prevValues, RewardPoints: e.target.value }))}}
+              onChange={(event) => handleChange("trips_details")(event)}
           />
         </DialogContent>
         <DialogActions>
@@ -365,11 +393,12 @@ const Demo = () => {
   const [trips, setTrips] = useState([]);
 
   useEffect(() => {
-    getAllTrip()
+    getEveryTrip()
       .then((data) => {
         if (data.err) {
           console.log(data.err);
         } else {
+          console.log('Fetched trips:', data);
             setTrips(data);
         }
       })
@@ -420,6 +449,12 @@ const Demo = () => {
       }}
     >
     <div style={{ height: 500, width: 500 }}>
+    <Typography variant="h5" align="center" gutterBottom >
+              Manage Trips
+            </Typography>
+            <Typography variant="body1" align="center" gutterBottom>
+              Make Changes to Trips here!
+            </Typography>
       <DataGrid rows={trips} columns={columns} pageSize={5} getRowId={(row) => row._id} />
     </div>
     

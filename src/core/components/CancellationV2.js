@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import {getAllCancellations } from "../../admin/helper/adminapicall";
+import {getAllCancellations, pigination } from "../../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,6 +23,7 @@ import { isAuthenticated } from '../../auth/helper/index';
 import Cancel from "../../user/Cancellations/Cancel"
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavBarv2"
+import TablePagination from '@mui/material/TablePagination';
 
 const Cancellation = () => {
 
@@ -30,8 +31,10 @@ const Cancellation = () => {
     const [cancellations, setCancellations] = useState([]);
     const [selectedCancellation, setSelectedCancellation] = useState({});
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
+    const [page , setPage] = useState(0)
 
     const preload = () => {
+        pigination(page)
         getAllCancellations(user._id, token).then((data) => {
           console.log(data, "YY")  //bookingId is in form of _id
         if (data.err) {
@@ -45,6 +48,28 @@ const Cancellation = () => {
     useEffect(() => {
       preload();
     }, []);
+
+    const handlePagination = async (event , newPage) => {
+        setPage(newPage)
+        event.preventDefault()
+    
+        await pigination(newPage + 1).then((data) => {
+          if (data.err) {
+            console.log(data.err);
+          } else {
+            setCancellations(data);
+          }
+        })
+          .catch((error) => {
+            console.error("Error fetching trip data:", error);
+            // setError("Error fetching trip data");
+          });
+      }
+  
+      const handleChangeRowsPerPage = (event) => {
+  
+      };
+  
 
     const handleViewButtonClick = (selectedRow) => {
         setSelectedCancellation(selectedRow)
@@ -88,6 +113,14 @@ const Cancellation = () => {
             </TableBody>
         </Table>
         </TableContainer>
+        <TablePagination
+      component="div"
+      count={10}
+      page={page}
+      onPageChange={handlePagination}
+      rowsPerPage={5}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+    />
 
         {/* Dialoge code to display view Booking details */}
 

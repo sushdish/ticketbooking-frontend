@@ -154,6 +154,16 @@ export const bookTrip = (userId, token,  requestBody) => {
     .catch((err) => console.log(err));
 };
 
+export const getPigination = (page) => {
+  return fetch(`${API}/bookingpigination?page=${page}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
 export const getAllBookings = (userId, token) => {
   console.log(token, "90")
   console.log(userId, "89")
@@ -208,6 +218,17 @@ export const getAllCancellations = (userId, token) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const pigination = (page) => {
+  return fetch(`${API}/pigination?page=${page}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
 
 export const getPendingCancellations = (userId, token) => {
   console.log(token, "90")

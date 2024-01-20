@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import {getUserCancellations } from "../admin/helper/adminapicall";
+import {getUserCancellations , pigination} from "../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,14 +22,17 @@ import {
 import { isAuthenticated } from '../auth/helper/index';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../core/components/NavBarv2"
+import TablePagination from '@mui/material/TablePagination';
 
 const AdminSolvedReq = () => {
     const { user, token } = isAuthenticated();
     const [solved, setSolved] = useState([]);
     const [selectedCancellation, setSelectedCancellation] = useState({});
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
+    const [page , setPage] = useState(0)
   
     const preload = () => {
+      pigination(page)
         getUserCancellations(user._id, token).then((data) => {
           console.log(data, "YY")  //bookingId is in form of _id
         if (data.err) {
@@ -43,6 +46,27 @@ const AdminSolvedReq = () => {
     useEffect(() => {
       preload();
     }, []);
+
+    const handlePagination = async (event , newPage) => {
+      setPage(newPage)
+      event.preventDefault()
+  
+      await pigination(newPage + 1).then((data) => {
+        if (data.err) {
+          console.log(data.err);
+        } else {
+          setSolved(data);
+        }
+      })
+        .catch((error) => {
+          console.error("Error fetching trip data:", error);
+          // setError("Error fetching trip data");
+        });
+    }
+
+    const handleChangeRowsPerPage = (event) => {
+
+    };
 
     const handleViewButtonClick = (selectedRow) => {
         setSelectedCancellation(selectedRow)
@@ -86,6 +110,15 @@ const AdminSolvedReq = () => {
                 </TableBody>
             </Table>
             </TableContainer>
+            
+        <TablePagination
+      component="div"
+      count={10}
+      page={page}
+      onPageChange={handlePagination}
+      rowsPerPage={5}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+    />
     
             {/* Dialoge code to display view Booking details */}
     

@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 import Navbar from "../core/components/NavBarv2"
 
 
-const AddProduct = () => {
+const AddTrips = () => {
   const defaultTheme = createTheme()
   const { user, token } = isAuthenticated();
   const [startTime, setStartTime] = useState(dayjs(Date.now()));
@@ -43,13 +43,8 @@ const AddProduct = () => {
       DestinationA: "",
       DestinationB: "",
       SeatCount: 0,
-
-      StartTime: startTime,
-      EndTime: endTime,
-
       StartTime: Date.now(),
       EndTime: Date.now(),
-
       BaggageAllowance: 0,
       TicketAmount: 0,
       SeatType: [],
@@ -61,24 +56,13 @@ const AddProduct = () => {
     loading: false,
     err: "",
 
-    success: "false",
+    success: false,
     message: "",
     createdTrip: "",
-    getRedirect: "",
-
-    success:"false",
-    message: "",
-    createdTrip: "",
-    getRedirect:"",
-
     categories: [],
   });
 
-  const { name, category, tripNumber, trips_details, loading, err, createdTrip, getRedirect, categories, success, message } = values;
-
-
-
-
+  const { name, category, tripNumber, trips_details, loading, err, createdTrip, categories, success, message } = values;
 
   const navigate = useNavigate();
 
@@ -108,11 +92,6 @@ const AddProduct = () => {
 
     if (name === 'trips_details') {
 
-
-  
-    if (name === 'trips_details') {
-      
-
       const tripsDetails = { ...values.trips_details, [event.target.name]: value };
       setValues({ ...values, trips_details: tripsDetails });
     } else {
@@ -131,7 +110,7 @@ const AddProduct = () => {
     console.log(endTime, "Values")
 
     const formattedStartTime = startTime.format(); 
-  const formattedEndTime = endTime.format();
+    const formattedEndTime = endTime.format();
     
     const requestBody = {
       name: values.name,
@@ -139,20 +118,19 @@ const AddProduct = () => {
       category: values.category,
       categoryId: values.category,
       trips_details: values.trips_details,
-      trips_details: {
-        ...values.trips_details,
-        StartTime: formattedStartTime,
-        EndTime: formattedEndTime,
-      }
+      // trips_details: {
+      //   ...values.trips_details,
+      //   StartTime: formattedStartTime,
+      //   EndTime: formattedEndTime,
+      // }
      
     }
    
-    setValues({ ...values, err: false,  success:false });
-    createTrip(user._id, token, values )
+    createTrip(user._id, token, requestBody )
       .then((data) => {
-
+        console.log(data, "22")
         if (data.err) {
-          setValues({ ...values, err: data.err, sccess: false });
+          setValues({ ...values, err: data.err, success: false });
         } else {
           setValues({
             ...values,
@@ -162,20 +140,16 @@ const AddProduct = () => {
             trips_details: {
               DestinationA: "",
               DestinationB: "",
-              SeatCount: 0,
+              SeatCount: "",
               StartTime: Date.now(),
-
               EndTime:  Date.now(),
-
-              EndTime: Date.now(),
-
-              BaggageAllowance: 0,
-              TicketAmount: 0,
-              SeatType: [],
-              TravelClass: [],
+              BaggageAllowance: "",
+              TicketAmount: "",
+              SeatType: "",
+              TravelClass: "",
               Currency: "",
-              PaymentType: [],
-              RewardPoints: 0,
+              PaymentType: "",
+              RewardPoints: "",
             },
             loading: false,
             error: false,
@@ -193,13 +167,9 @@ const AddProduct = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
 
-      <Container component="main" >
-        <CssBaseline />
-        <Navbar />
-
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-
+        <Navbar/>
         {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
 
           <Alert severity="success">{message} </Alert>
@@ -413,7 +383,7 @@ const AddProduct = () => {
               </TextField>
             </Grid>
 
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DateTimePicker']}>
 
@@ -436,7 +406,7 @@ const AddProduct = () => {
                   />
                 </DemoContainer>
               </LocalizationProvider>
-            </Grid>
+            </Grid> */}
 
           </Grid>
           <Button
@@ -453,12 +423,12 @@ const AddProduct = () => {
 
 
       </Container>
-      </Container>
+     
     </ThemeProvider>
   
   );
   
-}
+
 }
 
-export default AddProduct;
+export default AddTrips;

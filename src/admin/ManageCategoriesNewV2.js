@@ -28,7 +28,7 @@ const MatEdit = ({ categoryId, setCategories }) => {
   const [values, setValues] = useState({
     name: "",
     err: "",
-    success: "",
+    success: false,
   })
 
   const { name, err, success } = values
@@ -204,13 +204,6 @@ const Demo = () => {
 
       </div>
       <Navbar/>
-
-    {/* <div style={{ height: 500, width: 500 }}>
-      <DataGrid rows={categories} columns={columns} pageSize={5} getRowId={(row) => row._id} />
-    </div>
-    
-    <Navbar/> */}
-
     </div>
   );
 };

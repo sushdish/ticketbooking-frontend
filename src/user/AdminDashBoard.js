@@ -2,101 +2,23 @@ import React from "react";
 import Base from "../core/Base";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth/helper";
+import HomeV2 from "../core/HomeNewV2"
 
 const AdminDashBoard = () => {
-  const {
-    user: { name, email, role },
-  } = isAuthenticated();
+ 
 
-  const middleSide = () => {
-    return (
-      <div>
-        <li>
-          <Link to = "/" className="text-success">
-            Book Trip
-          </Link>
-        </li>
-      </div>
-    )
-  }
-
-  const adminLeftSide = () => {
-    return (
-      <div className="card border-success">
-        <div className="card-header bg-dark text-light">Admin Navigation</div>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <Link to="/admin/create/category" className="text-success">
-              Create Categories
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/admin/categories" className="text-success">
-              Manage Categories
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/admin/create/product" className="text-success">
-              Create Products
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/admin/products" className="text-success">
-              Manage Products
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/admin/cancellation/update" className="text-success">
-              User Cancellation Request
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/admin/cancellation/adminsolved" className="text-success">
-              Solved Cancellation Record
-            </Link>
-          </li>
-        </ul>
-      </div>
-    );
-  };
-
-  const adminRightSide = () => {
-    return (
-      <div>
-        <h1>Hello {name}</h1>
-        <div className="card border-success">
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <div className="badge badge-success">Name:</div> {name}
-            </li>
-            <li className="list-group-item">
-              <div className="badge badge-success">Email:</div> {email}
-            </li>
-            <li className="list-group-item">
-              <div className="badge badge-danger">Admin Access</div>
-            </li>
-          </ul>
-        </div>
-
-        
-      </div>
-
-      
-    );
-  };
 
   return (
+    <div>
     <Base
       title="Welcome to Admin Dashboard"
       description="Manage all of your products here"
       className="container bg-success p-4"
     >
-      <div className="row">
-        <div className="col-sm-12 col-md-3">{adminLeftSide()}</div>
-        <div className="col-sm-12 col-md-9">{adminRightSide()}</div>
-        <div className="col-sm-12 col-md-9">{middleSide()}</div>
-      </div>
+      
     </Base>
+    <HomeV2/>
+    </div>
   );
 };
 

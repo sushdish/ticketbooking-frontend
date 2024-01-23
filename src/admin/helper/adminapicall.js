@@ -319,3 +319,26 @@ export const getUserCancellations = (userId, token) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const getAllConfig = () => {
+  return fetch(`${API}/config`)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const tripConfig = (categoryId, token) => {
+  return fetch(`${API}/config/tripconfig/${categoryId}`, {
+    method : "POST", 
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }) 
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

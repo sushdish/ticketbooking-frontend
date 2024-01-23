@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getAllCategories, createTrip } from "./helper/adminapicall";
+import { getAllCategories, createTrip, getAllConfig, tripConfig } from "./helper/adminapicall";
 import { isAuthenticated } from "../auth/helper";
 import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -30,8 +30,10 @@ import Navbar from "../core/components/NavBarv2"
 const AddTrips = () => {
   const defaultTheme = createTheme()
   const { user, token } = isAuthenticated();
-  const [startTime, setStartTime] = useState(dayjs(Date.now()));
-  const [endTime, setEndTime] = useState(dayjs(Date.now()))
+  const [startTime, setStartTime] = useState(dayjs(''));
+  const [endTime, setEndTime] = useState(dayjs(''))
+
+  // const [config, setConfig] = useState({})
 
 
 
@@ -43,13 +45,13 @@ const AddTrips = () => {
       DestinationA: "",
       DestinationB: "",
       SeatCount: 0,
-      StartTime: Date.now(),
-      EndTime: Date.now(),
+      StartTime: '',
+      EndTime: '',
       BaggageAllowance: 0,
       TicketAmount: 0,
       SeatType: [],
       TravelClass: [],
-      Currency: "",
+      Currency: [],
       PaymentType: [],
       RewardPoints: 0,
     },
@@ -60,73 +62,103 @@ const AddTrips = () => {
     message: "",
     createdTrip: "",
     categories: [],
+    paymentTypes: []
+
   });
 
-  const { name, category, tripNumber, trips_details, loading, err, createdTrip, categories, success, message } = values;
+  const [selectedCategory, setSelectedCategory] = useState("");
+  // const [paymentTypes, setPaymentTypes] = useState([]);
+
+
+  const { name, category, tripNumber, trips_details, loading, err, createdTrip, categories, success, message, paymentTypes } = values;
+  const { StartTime, EndTime, DestinationA, DestinationB,
+    SeatCount, BaggageAllowance, TicketAmount, SeatType,
+    TravelClass, Currency, PaymentType, RewardPoints
+  } = trips_details
+
 
   const navigate = useNavigate();
 
   const preload = () => {
-    getAllCategories().then((data) => {
-      if (data.err) {
-        setValues({ ...values, err: data.err });
-      } else {
-        setValues({
-          ...values,
-          categories: data,
-          // formData: new FormData(),
-        });
-      }
-    });
+    getAllCategories()
+      .then((data) => {
+        console.log(data, "55")
+        if (data.err) {
+          setValues({ ...values, err: data.err });
+        } else {
+          setValues({
+            ...values,
+            categories: data,
+            // paymentTypes: data,
+            // formData: new FormData(),
+          });
+        }
+      });
   };
+
+
 
   useEffect(() => {
     preload();
   }, []);
 
 
+
+
   const handleChange = (name) => (event) => {
     const value = event.target.value;
 
-    // console.log(value, "83", name)
 
-    if (name === 'trips_details') {
+    console.log(value, "83", name)
 
-      const tripsDetails = { ...values.trips_details, [event.target.name]: value };
-      setValues({ ...values, trips_details: tripsDetails });
-    } else {
-      setValues({ ...values, [name]: value });
-
-      // console.log(values, "90")
-
+    if (name === 'category') {
+      handleTripConfig(value)
     }
-  };
+
+
+    setValues({
+      ...values,
+      [name]: event.target.value,
+      trips_details: {
+        ...values.trips_details,
+        [name]: event.target.value
+      }
+    })
+
+
+
+  }
+
+  const handleTripConfig = (categoryId) => {
+    tripConfig(categoryId, token).then((data) => {
+      console.log(data, "132")
+      setValues({ ...values, paymentTypes: data.PaymentType })
+      console.log(values, "134")
+    })
+  }
+
+
 
   const onClick = (event) => {
     event.preventDefault();
 
-    setValues({ ...values, err: false, success: false });
-    console.log(startTime, "Values")
-    console.log(endTime, "Values")
 
-    const formattedStartTime = startTime.format(); 
-    const formattedEndTime = endTime.format();
-    
+    const updatedtrips_details = values.trips_details;
+    updatedtrips_details.StartTime = startTime.format();
+    updatedtrips_details.EndTime = endTime.format();
+
+
     const requestBody = {
       name: values.name,
       tripNumber: values.tripNumber,
       category: values.category,
       categoryId: values.category,
-      trips_details: values.trips_details,
-      // trips_details: {
-      //   ...values.trips_details,
-      //   StartTime: formattedStartTime,
-      //   EndTime: formattedEndTime,
-      // }
-     
+      trips_details: updatedtrips_details
     }
-   
-    createTrip(user._id, token, requestBody )
+
+    console.log(requestBody, "RequestBody")
+
+    createTrip(user._id, token, requestBody)
       .then((data) => {
         console.log(data, "22")
         if (data.err) {
@@ -142,7 +174,7 @@ const AddTrips = () => {
               DestinationB: "",
               SeatCount: "",
               StartTime: Date.now(),
-              EndTime:  Date.now(),
+              EndTime: Date.now(),
               BaggageAllowance: "",
               TicketAmount: "",
               SeatType: "",
@@ -169,7 +201,7 @@ const AddTrips = () => {
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Navbar/>
+        <Navbar />
         {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
 
           <Alert severity="success">{message} </Alert>
@@ -228,7 +260,7 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="DestinationA"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("DestinationA")(event)}
                 value={values.trips_details.DestinationA}
                 label="DestinationA"
                 name="DestinationA"
@@ -242,7 +274,7 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="DestinationB"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("DestinationB")(event)}
                 value={values.trips_details.DestinationB}
                 label="DestinationB"
                 name="DestinationB"
@@ -256,7 +288,7 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="SeatCount"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("SeatCount")(event)}
                 value={values.trips_details.SeatCount}
                 label="SeatCount"
                 name="SeatCount"
@@ -270,7 +302,7 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="BaggageAllowance"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("BaggageAllowance")(event)}
                 value={values.trips_details.BaggageAllowance}
                 label="BaggageAllowance"
                 name="BaggageAllowance"
@@ -284,7 +316,7 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="TicketAmount"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("TicketAmount")(event)}
                 value={values.trips_details.TicketAmount}
                 label="TicketAmount"
                 name="TicketAmount"
@@ -298,9 +330,10 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="SeatType"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("SeatType")(event)}
                 value={values.trips_details.SeatType}
                 label="SeatType"
+                select
                 name="SeatType"
                 autoComplete="SeatType"
                 autoFocus
@@ -312,9 +345,10 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="TravelClass"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("TravelClass")(event)}
                 value={values.trips_details.TravelClass}
                 label="TravelClass"
+                select
                 name="TravelClass"
                 autoComplete="TravelClass"
                 autoFocus
@@ -326,27 +360,37 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="Currency"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("Currency")(event)}
                 value={values.trips_details.Currency}
                 label="Currency"
+                select
                 name="Currency"
                 autoComplete="Currency"
                 autoFocus
               />
             </Grid>
             <Grid item xs={6}>
+
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="PaymentType"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("PaymentType")(event)}
                 value={values.trips_details.PaymentType}
                 label="PaymentType"
-                name="PaymentType"
-                autoComplete="PaymentType"
+                // name="PaymentType"
+                select
+                // autoComplete="PaymentType"
                 autoFocus
-              />
+              >
+                {/* Map through your category options and create MenuItem for each */}
+                {paymentTypes.map((paymentType, index) => (
+                  <MenuItem key={index} value={paymentType}>
+                    <div>{paymentType}</div>
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -354,7 +398,7 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="RewardPoints"
-                onChange={(event) => handleChange("trips_details")(event)}
+                onChange={(event) => handleChange("RewardPoints")(event)}
                 value={values.trips_details.RewardPoints}
                 label="RewardPoints"
                 name="RewardPoints"
@@ -371,7 +415,8 @@ const AddTrips = () => {
                 label="Category"
                 select
                 value={values.category}
-                onChange={handleChange("category")}
+                onChange={handleChange('category')}
+
                 autoFocus
               >
                 {/* Map through your category options and create MenuItem for each */}
@@ -383,7 +428,7 @@ const AddTrips = () => {
               </TextField>
             </Grid>
 
-            {/* <Grid item xs={6}>
+            <Grid item xs={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DateTimePicker']}>
 
@@ -406,7 +451,7 @@ const AddTrips = () => {
                   />
                 </DemoContainer>
               </LocalizationProvider>
-            </Grid> */}
+            </Grid>
 
           </Grid>
           <Button
@@ -423,11 +468,11 @@ const AddTrips = () => {
 
 
       </Container>
-     
+
     </ThemeProvider>
-  
+
   );
-  
+
 
 }
 

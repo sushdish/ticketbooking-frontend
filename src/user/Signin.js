@@ -16,12 +16,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import axios from 'axios'
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-// import Tabs from '@material-ui/core/Tabs';
-// import LinkTab from '../core/LinkTab';
-// import Tab from '@material-ui/core/Tab';
 import { useNavigate } from "react-router-dom";
 
 
@@ -31,8 +27,8 @@ const Signin = () => {
     email: "",
     password: "",
     err: "",
-    success: false,
-    loading: false,
+    // success: false,
+    // loading: false,
   });
 
   const { email, password, err, success, loading } = values;
@@ -46,22 +42,23 @@ const Signin = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setValues({ ...values, err: false, loading: false });
-    signin({ email, password })
+    // setValues({ ...values, err: false});
+    signin(values)
       .then((data) => {
         console.log(data, "BB")
         if (data.err) {
-          setValues({ ...values, err: data.err, loading: false });
+          setValues({ ...values, err: data.err});
+          window.alert("Invalid username or password")
         } else {
           authenticate(data, () => {
             if (data.user && data.user.role === 1){
-              setValues({...values, email: "", password: "", err: "", success: true, loading: true});
-
+              setValues({...values, email: "", password: "", err: ""});
+              console.log(values, "56")
               navigate("/admin/admindashboard")
-              // navigate("/")
+              
             } else {
-              setValues({...values, email: "", password: "", err: "", success: true, loading: true});
-
+              setValues({...values, email: "", password: "", err: false});
+              console.log(values, "64")
               navigate("/user/userdashboard")
             }
             

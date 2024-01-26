@@ -49,6 +49,7 @@ const AddCategory = () => {
           setCategoryName({...categoryName, error: data.err, success: false});
         } else {
           setCategoryName({...categoryName, name: "", error: false, success: true, message: data.message});
+          console.log(categoryName, "52")
         }
       })
       .catch((err) => {

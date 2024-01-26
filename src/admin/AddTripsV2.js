@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getAllCategories, createTrip, getAllConfig, tripConfig } from "./helper/adminapicall";
 import { isAuthenticated } from "../auth/helper";
-import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -18,7 +15,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Select, MenuItem } from '@mui/material';
-
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -32,9 +28,6 @@ const AddTrips = () => {
   const { user, token } = isAuthenticated();
   const [startTime, setStartTime] = useState(dayjs(''));
   const [endTime, setEndTime] = useState(dayjs(''))
-
-  // const [config, setConfig] = useState({})
-
 
 
   const [values, setValues] = useState({
@@ -57,24 +50,23 @@ const AddTrips = () => {
     },
     loading: false,
     err: "",
-
     success: false,
     message: "",
     createdTrip: "",
     categories: [],
-    paymentTypes: []
+    paymentTypes: [],
+    seatTypes: [],
+    travelClass: [],
+    currency: [],
 
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("");
-  // const [paymentTypes, setPaymentTypes] = useState([]);
+ 
+  const { name, category, tripNumber, trips_details, loading, err, createdTrip, categories, 
+    success, message, paymentTypes, seatTypes, travelClass, currency } = values;
 
-
-  const { name, category, tripNumber, trips_details, loading, err, createdTrip, categories, success, message, paymentTypes } = values;
-  const { StartTime, EndTime, DestinationA, DestinationB,
-    SeatCount, BaggageAllowance, TicketAmount, SeatType,
-    TravelClass, Currency, PaymentType, RewardPoints
-  } = trips_details
+  const { StartTime, EndTime, DestinationA, DestinationB,SeatCount, BaggageAllowance, TicketAmount, SeatType,
+    TravelClass, Currency, PaymentType, RewardPoints} = trips_details
 
 
   const navigate = useNavigate();
@@ -89,8 +81,6 @@ const AddTrips = () => {
           setValues({
             ...values,
             categories: data,
-            // paymentTypes: data,
-            // formData: new FormData(),
           });
         }
       });
@@ -108,31 +98,34 @@ const AddTrips = () => {
   const handleChange = (name) => (event) => {
     const value = event.target.value;
 
-
     console.log(value, "83", name)
 
     if (name === 'category') {
-      handleTripConfig(value)
-    }
 
+      handleTripConfig(value)
+      console.log(value, "113") //has categoryId
+      console.log(name, "114") //has category 
+
+    }
 
     setValues({
       ...values,
-      [name]: event.target.value,
+      [name]: value,
       trips_details: {
         ...values.trips_details,
-        [name]: event.target.value
+        [name]: value
       }
     })
-
-
-
   }
+
 
   const handleTripConfig = (categoryId) => {
     tripConfig(categoryId, token).then((data) => {
       console.log(data, "132")
-      setValues({ ...values, paymentTypes: data.PaymentType })
+      setValues({
+        ...values, paymentTypes: data.PaymentType, seatTypes: data.SeatType,
+        travelClass: data.TravelClass, currency: data.Currency, category: data.categoryId
+      })
       console.log(values, "134")
     })
   }
@@ -151,7 +144,6 @@ const AddTrips = () => {
     const requestBody = {
       name: values.name,
       tripNumber: values.tripNumber,
-      category: values.category,
       categoryId: values.category,
       trips_details: updatedtrips_details
     }
@@ -260,7 +252,8 @@ const AddTrips = () => {
                 required
                 fullWidth
                 id="DestinationA"
-                onChange={(event) => handleChange("DestinationA")(event)}
+                // onChange={(event) => handleChange("DestinationA")(event)}
+                onChange={handleChange("DestinationA")}
                 value={values.trips_details.DestinationA}
                 label="DestinationA"
                 name="DestinationA"
@@ -337,7 +330,14 @@ const AddTrips = () => {
                 name="SeatType"
                 autoComplete="SeatType"
                 autoFocus
-              />
+              >
+                {/* Map through your category options and create MenuItem for each */}
+                {seatTypes.map((seatType, index) => (
+                  <MenuItem key={index} value={seatType}>
+                    <div>{seatType}</div>
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -352,7 +352,14 @@ const AddTrips = () => {
                 name="TravelClass"
                 autoComplete="TravelClass"
                 autoFocus
-              />
+              >
+                {/* Map through your category options and create MenuItem for each */}
+                {travelClass.map((travel, index) => (
+                  <MenuItem key={index} value={travel}>
+                    <div>{travel}</div>
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -367,7 +374,14 @@ const AddTrips = () => {
                 name="Currency"
                 autoComplete="Currency"
                 autoFocus
-              />
+              >
+                {/* Map through your category options and create MenuItem for each */}
+                {currency.map((currency, index) => (
+                  <MenuItem key={index} value={currency}>
+                    <div>{currency}</div>
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={6}>
 
@@ -415,13 +429,14 @@ const AddTrips = () => {
                 label="Category"
                 select
                 value={values.category}
-                onChange={handleChange('category')}
-
+                // onChange={handleChange('category')}
+                onChange={handleChange("category")}
+                name="category"
                 autoFocus
               >
                 {/* Map through your category options and create MenuItem for each */}
                 {categories.map((category, index) => (
-                  <MenuItem key={index} value={category._id}>
+                  <MenuItem key={index} value={category._id} >
                     {category.name}
                   </MenuItem>
                 ))}

@@ -16,12 +16,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import axios from 'axios'
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-// import Tabs from '@material-ui/core/Tabs';
-// import LinkTab from '../core/LinkTab';
-// import Tab from '@material-ui/core/Tab';
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -33,27 +29,37 @@ const Signup = () => {
     gender: "",
     contact: "",
     err: "",
-    success: false,
-    message: '',
+    // success: false,
+    
   });
+  // const [success, setSuccess] = useState(false)
 
   const navigate = useNavigate();
-  const { name, email, password, gender, contact, err, success, message } = values;
+  const { name, email, password, gender, contact, err, success,  message } = values;
 
-  const handleChange = (name) => (event) => {
-    setValues({ ...values, err: "", [name]: event.target.value });
+  const handleChange = (parameter) => (event) => {
+   
+    console.log(parameter, "44")  
+    // console.log(event, "45")
+    setValues({ ...values, [parameter]: event.target.value });
+    console.log(values, "49")
+    console.log(event.target.value, "52")
+   
   };
 
-  const onSubmit = (event) => {
+  const onSubmit =  (event) => {
     event.preventDefault();
-    setValues({ ...values, err: false });
-    signup({ name, email, password, gender, contact })
+    // setValues({ ...values, err: false });
+     signup(values)
       .then((data) => {
         console.log(data, "A")
         if (data.err) {
           setValues({ ...values, err: data.err, success: false });
+          window.alert("Registeration Failed")
+          console.log("Registeration Failed")
+             console.log(values, "61")
+
         } else {
-      
           setValues({
             ...values,
             name: "",
@@ -62,30 +68,40 @@ const Signup = () => {
             gender: "",
             contact: "",
             err: false,
-            success: true,
-            message: data.message
-          });
+            // success: true,
+            });
+          // setSuccess(true)
+          window.alert("Registeration Successfull")
+          console.log("Registration Successfull")
+
+          console.log(values, "73")
+          // console.log(success, "74")
           navigate("/signin")
+          
         }
       })
-      .catch(console.log("Error signing up!"));
+      .catch(err);
+      console.log(err, "80")
       // alert(data.body.message);
   };
-
+  
   // const signupForm = () => {
     return (
       <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        {success ===   true ? (<Stack sx={{ width: '100%' }} spacing={2}>
 
-          <Alert severity="success">{message} </Alert>
+        {/* {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
+
+          <Alert severity="success">Successfully Signup</Alert>
         </Stack>
-        ) : ("")}
-        {success === false && err !== "" && (<Stack sx={{ width: '100%'}} spacing={2}>
+        ) : ("")} */}
+
+           
+        {/* {success === false && err !== "" && (<Stack sx={{ width: '100%'}} spacing={2}>
           <Alert severity="error">{err}</Alert>
         </Stack>
-        )}
+        )} */}
         <Box
           sx={{
             marginTop: 8,

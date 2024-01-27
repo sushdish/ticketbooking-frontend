@@ -100,26 +100,28 @@ const AddTrips = () => {
 
     console.log(value, "83", name)
 
-    if (name === 'category') {
-
-      handleTripConfig(value)
-      console.log(value, "113") //has categoryId
-      console.log(name, "114") //has category 
-
-    }
-
     setValues({
       ...values,
       [name]: value,
       trips_details: {
         ...values.trips_details,
-        [name]: value
+        [name]: value, 
       }
     })
+
+    if (name === 'category') {
+
+      handleTripConfig(value)
+      console.log(value, "113") //has categoryId
+      console.log(name, "114") //has category 
+    }
+
+   
   }
 
 
   const handleTripConfig = (categoryId) => {
+    
     tripConfig(categoryId, token).then((data) => {
       console.log(data, "132")
       setValues({

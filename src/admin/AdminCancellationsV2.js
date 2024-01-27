@@ -46,18 +46,21 @@ const AdminCancellationsV2 = () => {
       const {amount, created} = refunds
 
       const [page , setPage] = useState(0)
+      const [total, setTotal] = useState()
 
       const navigate = useNavigate()
 
       const preload = () => {
-        pigination(page)
-        getPendingCancellations(user._id, token)
+        getPendingCancellations(user._id, token,page)
         .then((data) => {
             console.log(data, "YY")  //bookingId is in form of _id
           if (data.err) {
             console.log(data.err);
           } else {
-            setPendings(data);
+            setTotal(data.totalCancellation)
+            setPendings(data.cancellation);
+            console.log(data, "60")
+            console.log(total, "63")
           }
         });
       };
@@ -70,9 +73,9 @@ const AdminCancellationsV2 = () => {
         setPage(newPage)
         event.preventDefault()
     
-        await pigination(newPage + 1).then((data) => {
+        await getPendingCancellations(newPage + 1).then((data) => {
           if (data.err) {
-            console.log(data.err);
+            console.log(data.err, "75");
           } else {
             setPendings(data);
           }
@@ -219,7 +222,7 @@ const AdminCancellationsV2 = () => {
 
         <TablePagination
       component="div"
-      count={10}
+      count={total}
       page={page}
       onPageChange={handlePagination}
       rowsPerPage={5}

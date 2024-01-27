@@ -53,12 +53,11 @@ const Home = () => {
   });
 
   const [index, setSelectedIndex] = useState({})
-
   const { paymentReferenceNumber, booking_details, createdBook, loading, err } = values
 
 
   const preloadProducts = () => {
-    getAllTrip(page).then((data) => {
+    getAllTrip().then((data) => {
       if (data.err) {
         console.log(data.err);
       } else {
@@ -74,6 +73,31 @@ const Home = () => {
   useEffect(() => {
     preloadProducts();
   }, []);
+
+  const handlePagination = async (event , newPage) => {
+    setPage(newPage)
+    event.preventDefault()
+
+    await getAllTrip(newPage + 1).then((data) => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        setTrips(data);
+      }
+    })
+      .catch((error) => {
+        console.error("Error fetching trip data:", error);
+        // setError("Error fetching trip data");
+      });
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+  
+  };
+
+
+
+
 
 
 
@@ -173,27 +197,7 @@ const Home = () => {
       });
   }
 
-  const handlePagination = async (event , newPage) => {
-    setPage(newPage)
-    event.preventDefault()
-
-    await getAllTrip(newPage + 1).then((data) => {
-      if (data.err) {
-        console.log(data.err);
-      } else {
-        setTrips(data);
-      }
-    })
-      .catch((error) => {
-        console.error("Error fetching trip data:", error);
-        // setError("Error fetching trip data");
-      });
-  }
-
-  const handleChangeRowsPerPage = (event) => {
-  
-  };
-
+ 
 
   return (
     <>

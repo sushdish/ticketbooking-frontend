@@ -34,7 +34,6 @@ const Cancellation = () => {
     const [page , setPage] = useState(0)
 
     const preload = () => {
-        pigination(page)
         getAllCancellations(user._id, token).then((data) => {
           console.log(data, "YY")  //bookingId is in form of _id
         if (data.err) {
@@ -53,7 +52,7 @@ const Cancellation = () => {
         setPage(newPage)
         event.preventDefault()
     
-        await pigination(newPage + 1).then((data) => {
+        await getAllCancellations(newPage + 1).then((data) => {
           if (data.err) {
             console.log(data.err);
           } else {

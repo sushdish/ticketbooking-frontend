@@ -84,8 +84,8 @@ export const getTripById = (tripId) => {
     .catch((err) => console.log(err));
 };
 
-export const getAllTrip = (page) => {
-  return fetch(`${API}/trips?page=${page}`, {
+export const getAllTrip = () => {
+  return fetch(`${API}/trips`, {
     method: "GET",
   })
     .then((response) => {
@@ -94,6 +94,7 @@ export const getAllTrip = (page) => {
     .catch((err) => console.log(err));
 };
 
+// return fetch(`${API}/trips?page=${page}`
 export const getEveryTrip = () => {
   return fetch(`${API}/alltrips`, {
     method: "GET",
@@ -230,10 +231,11 @@ export const pigination = (page) => {
 };
 
 
-export const getPendingCancellations = (userId, token) => {
+export const getPendingCancellations = (userId, token, page) => {
   console.log(token, "90")
   console.log(userId, "89")
-  return fetch(`${API}/cancellation/pending/${userId}`, {
+  console.log(page, "237")
+  return fetch(`${API}/cancellation/pending/${userId}?page=${page + 1}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

@@ -32,14 +32,17 @@ const Cancellation = () => {
     const [selectedCancellation, setSelectedCancellation] = useState({});
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
     const [page , setPage] = useState(0)
+     const [total, setTotal] = useState()
+
 
     const preload = () => {
-        getAllCancellations(user._id, token).then((data) => {
+        getAllCancellations(user._id, token, page).then((data) => {
           console.log(data, "YY")  //bookingId is in form of _id
         if (data.err) {
           console.log(data.err);
         } else {
-          setCancellations(data);
+          setCancellations(data.cancellation);
+          setTotal(data.totalUserCancellation)
         }
       });
     };
@@ -52,11 +55,11 @@ const Cancellation = () => {
         setPage(newPage)
         event.preventDefault()
     
-        await getAllCancellations(newPage + 1).then((data) => {
+        await getAllCancellations(newPage).then((data) => {
           if (data.err) {
             console.log(data.err);
           } else {
-            setCancellations(data);
+            setCancellations(data.cancellation);
           }
         })
           .catch((error) => {
@@ -114,7 +117,7 @@ const Cancellation = () => {
         </TableContainer>
         <TablePagination
       component="div"
-      count={10}
+      count={total}
       page={page}
       onPageChange={handlePagination}
       rowsPerPage={5}

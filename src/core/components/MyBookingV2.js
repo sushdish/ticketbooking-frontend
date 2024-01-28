@@ -39,16 +39,18 @@ const MyBookings = () => {
   });
 
   const [page , setPage] = useState(0)
+  const [total, setTotal] = useState()
 
   const {userReason, createdData} = values
 
   const preloadBookings = () => {
-    getPigination(page)
-    getAllBookings(user._id, token).then((data) => {
+   
+    getAllBookings(user._id, token, page).then((data) => {
       if (data.err) {
         console.log(data.err);
       } else {
-        setBookings(data);
+        setBookings(data.bookings);
+        setTotal(data.totalBooking)
       }
     })
       .catch((error) => {
@@ -65,11 +67,11 @@ const MyBookings = () => {
     setPage(newPage)
     event.preventDefault()
 
-    await getPigination(newPage + 1).then((data) => {
+    await getAllBookings(newPage).then((data) => {
       if (data.err) {
         console.log(data.err);
       } else {
-        setBookings(data);
+        setBookings(data.bookings);
       }
     })
       .catch((error) => {
@@ -209,7 +211,7 @@ const MyBookings = () => {
 
         <TablePagination
       component="div"
-      count={10}
+      count={total}
       page={page}
       onPageChange={handlePagination}
       rowsPerPage={5}

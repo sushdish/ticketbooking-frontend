@@ -84,8 +84,9 @@ export const getTripById = (tripId) => {
     .catch((err) => console.log(err));
 };
 
-export const getAllTrip = () => {
-  return fetch(`${API}/trips`, {
+export const getAllTrip = (page) => {
+  console.log(page)
+  return fetch(`${API}/trips?page=${page + 1}`, {
     method: "GET",
   })
     .then((response) => {
@@ -165,10 +166,10 @@ export const getPigination = (page) => {
     .catch((err) => console.log(err));
 };
 
-export const getAllBookings = (userId, token) => {
+export const getAllBookings = (userId, token, page) => {
   console.log(token, "90")
   console.log(userId, "89")
-  return fetch(`${API}/booking/${userId}`, {
+  return fetch(`${API}/booking/${userId}?page=${page + 1}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -202,10 +203,10 @@ export const cancellation = (userId, token, requestBody) => {
     .catch((err) => console.log(err));
 };
 
-export const getAllCancellations = (userId, token) => {
+export const getAllCancellations = (userId, token, page) => {
   console.log(token, "90")
   console.log(userId, "89")
-  return fetch(`${API}/cancellation/${userId}`, {
+  return fetch(`${API}/cancellation/allcancellation/${userId}?page=${page + 1}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -268,10 +269,10 @@ export const adminReason = (userId, token, requestBody) => {
     .catch((err) => console.log(err));
 };
 
-export const getSolvedRequest = (userId, token) => {
+export const getSolvedRequest = (userId, token, page) => {
   console.log(token, "90")
   console.log(userId, "89")
-  return fetch(`${API}/cancellation/solved/${userId}`, {
+  return fetch(`${API}/cancellation/solved/${userId}?page=${page + 1}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -304,10 +305,10 @@ export const refund = (userId, token, requestBody) => {
     .catch((err) => console.log(err));
 };
 
-export const getUserCancellations = (userId, token) => {
+export const getAdminResolvedReq = (userId, token, page) => {
   console.log(token, "90")
   console.log(userId, "89")
-  return fetch(`${API}/cancellation/adminsolved/${userId}`, {
+  return fetch(`${API}/cancellation/adminsolved/${userId}?page=${page + 1}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

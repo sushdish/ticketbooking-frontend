@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import {getUserCancellations , pigination} from "../admin/helper/adminapicall";
+import {getAdminResolvedReq , pigination} from "../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -30,15 +30,17 @@ const AdminSolvedReq = () => {
     const [selectedCancellation, setSelectedCancellation] = useState({});
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
     const [page , setPage] = useState(0)
-  
+   const [total, setTotal] = useState()
+
     const preload = () => {
-      pigination(page)
-        getUserCancellations(user._id, token).then((data) => {
+      
+      getAdminResolvedReq(user._id, token, page).then((data) => {
           console.log(data, "YY")  //bookingId is in form of _id
         if (data.err) {
           console.log(data.err);
         } else {
-            setSolved(data);
+            setSolved(data.adminData);
+            setTotal(data.totalData)
         }
       });
     };
@@ -51,11 +53,11 @@ const AdminSolvedReq = () => {
       setPage(newPage)
       event.preventDefault()
   
-      await pigination(newPage + 1).then((data) => {
+      await getAdminResolvedReq(newPage).then((data) => {
         if (data.err) {
           console.log(data.err);
         } else {
-          setSolved(data);
+          setSolved(data.adminData);
         }
       })
         .catch((error) => {
@@ -113,7 +115,7 @@ const AdminSolvedReq = () => {
             
         <TablePagination
       component="div"
-      count={10}
+      count={total}
       page={page}
       onPageChange={handlePagination}
       rowsPerPage={5}

@@ -34,6 +34,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [page , setPage] = useState(0)
+  const [total, setTotal] = useState()
 
   const { user, token } = isAuthenticated();
   const [trips, setTrips] = useState([]);
@@ -57,11 +58,15 @@ const Home = () => {
 
 
   const preloadProducts = () => {
-    getAllTrip().then((data) => {
+    getAllTrip(page).then((data) => {
+      console.log(data, "61")
       if (data.err) {
         console.log(data.err);
       } else {
-        setTrips(data);
+        setTrips(data.trip);
+        console.log(trips, "67")
+
+        setTotal(data.totalTrips)
       }
     })
       .catch((error) => {
@@ -72,17 +77,19 @@ const Home = () => {
 
   useEffect(() => {
     preloadProducts();
-  }, []);
+  }, [])
 
   const handlePagination = async (event , newPage) => {
     setPage(newPage)
     event.preventDefault()
 
-    await getAllTrip(newPage + 1).then((data) => {
+    await getAllTrip(newPage).then((data) => {
+      console.log(data, "87")
       if (data.err) {
         console.log(data.err);
       } else {
-        setTrips(data);
+        setTrips(data.trip);
+        console.log(trips, "92")
       }
     })
       .catch((error) => {
@@ -251,7 +258,7 @@ const Home = () => {
 
         <TablePagination
       component="div"
-      count={10}
+      count={total}
       page={page}
       onPageChange={handlePagination}
       rowsPerPage={5}

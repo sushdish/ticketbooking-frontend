@@ -59,7 +59,8 @@ const AdminCancellationsV2 = () => {
           } else {
             setTotal(data.totalCancellation)
             setPendings(data.cancellation);
-            console.log(data, "60")
+            console.log(pendings, "62")
+           
             console.log(total, "63")
           }
         });
@@ -73,11 +74,11 @@ const AdminCancellationsV2 = () => {
         setPage(newPage)
         event.preventDefault()
     
-        await getPendingCancellations(newPage + 1).then((data) => {
+        await getPendingCancellations(newPage).then((data) => {
           if (data.err) {
             console.log(data.err, "75");
           } else {
-            setPendings(data);
+            setPendings(data.cancellation);
           }
         })
           .catch((error) => {

@@ -31,16 +31,18 @@ const RequestSolved = () => {
     const [selectedCancellation, setSelectedCancellation] = useState({});
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
     const [page , setPage] = useState(0)
-
+    const [total, setTotal] = useState()
+    
   
     const preload = () => {
-      pigination(page)
-        getSolvedRequest(user._id, token).then((data) => {
+      
+        getSolvedRequest(user._id, token, page).then((data) => {
           console.log(data, "YY")  //bookingId is in form of _id
         if (data.err) {
           console.log(data.err);
         } else {
-            setSolved(data);
+            setSolved(data.solved);
+            setTotal(data.totalData)
         }
       });
     };
@@ -53,11 +55,11 @@ const RequestSolved = () => {
       setPage(newPage)
       event.preventDefault()
   
-      await pigination(newPage + 1).then((data) => {
+      await getSolvedRequest(newPage).then((data) => {
         if (data.err) {
           console.log(data.err);
         } else {
-          setSolved(data);
+          setSolved(data.solved);
         }
       })
         .catch((error) => {
@@ -114,7 +116,7 @@ const RequestSolved = () => {
             </TableContainer>
             <TablePagination
       component="div"
-      count={10}
+      count={total}
       page={page}
       onPageChange={handlePagination}
       rowsPerPage={5}

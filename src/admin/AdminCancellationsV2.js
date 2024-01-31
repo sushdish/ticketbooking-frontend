@@ -33,8 +33,9 @@ const AdminCancellationsV2 = () => {
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
     const [isApproveDialogOpen, setApproveDialogOpen] = useState(false);
     const [values, setValues] = useState({
-        adminReason: "",
+        adminReasonn: "",
         createdData: "",
+        refundAmount: "",
       });
 
       const [refunds, setRefunds] = useState({
@@ -42,7 +43,7 @@ const AdminCancellationsV2 = () => {
         created: "",
       })
 
-      const {userReason, createdData} = values
+      const {adminReasonn, createdData, refundAmount} = values
       const {amount, created} = refunds
 
       const [page , setPage] = useState(0)
@@ -131,7 +132,8 @@ const AdminCancellationsV2 = () => {
             bookingId: selectedRequest.bookingId,
             cancellationId: selectedRequest.cancellationId, 
             amount: refunds.amount,
-            adminReason: values.adminReason,
+            adminReason: values.adminReasonn,
+            refundAmount: refunds.amount
         };
     
         console.log(requestBody, 'Request Body');
@@ -146,8 +148,9 @@ const AdminCancellationsV2 = () => {
             } else {
                 setValues({
                     ...values,
-                    adminReason: "",
+                    adminReasonn: "",
                     createdData: "",
+                    refundAmount: data.amount,
                   });
 
                   setRefunds({
@@ -156,11 +159,12 @@ const AdminCancellationsV2 = () => {
                     created: "",
                   });
 
-                  getPendingCancellations(user._id, token).then((data) =>{
+                  getPendingCancellations(user._id, token, page).then((data) =>{
                     if (data.err) {
                       console.log(data.err);
                     } else {
-                      setPendings(data);
+                      setPendings(data.cancellation);
+                      setTotal(data.totalCancellation)
                     }
                   })
                  

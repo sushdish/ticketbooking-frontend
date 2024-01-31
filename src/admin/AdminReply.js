@@ -11,8 +11,9 @@ import {
 const AdminReply = ({AdminReply , CancelBox}) => {
 
     const [values, setValues] = useState({
-        adminReason: "",
+        adminReasonn: "",
         createdData: "",
+        refundAmount: "",
       });
 
       const [refunds, setRefunds] = useState({
@@ -20,7 +21,7 @@ const AdminReply = ({AdminReply , CancelBox}) => {
         created: "",
       })
 
-      const {adminReason, createdData} = values
+      const {adminReasonn, createdData, refundAmount} = values
       const {amount, created} = refunds
 
       const handleCloseBookDialog = () => {
@@ -63,12 +64,12 @@ const AdminReply = ({AdminReply , CancelBox}) => {
                             margin="normal"
                             required
                             fullWidth
-                            id="adminReason"
-                            onChange={handleChange('adminReason')}
-                            value={adminReason}
-                            label="adminReason"
-                            name="adminReason"
-                            autoComplete="adminReason"
+                            id="adminReasonn"
+                            onChange={handleChange('adminReasonn')}
+                            value={adminReasonn}
+                            label="adminReasonn"
+                            name="adminReasonn"
+                            autoComplete="adminReasonn"
                             autoFocus
                             
                            

@@ -254,6 +254,7 @@ export const getPendingCancellations = (userId, token, page) => {
 export const adminReason = (userId, token, requestBody) => {
   console.log(token, "90")
   console.log(userId, "89")
+  console.log(requestBody, "257")
   return fetch(`${API}/cancellation/update/${userId}`, {
     method: "PUT",
     headers: {
@@ -340,6 +341,42 @@ export const tripConfig = (categoryId, token) => {
       Authorization: `Bearer ${token}`,
     },
   }) 
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const getUserRewards = (userId, token, page) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  return fetch(`${API}/booking/rewards/${userId}?page=${page + 1}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(booking),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const getAllRefunds = (userId, token, page) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  return fetch(`${API}/refund/totalrefund/${userId}?page=${page + 1}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(booking),
+  })
     .then((response) => {
       return response.json();
     })

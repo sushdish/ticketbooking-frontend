@@ -79,6 +79,8 @@ export default function PersistentDrawerLeft() {
     {name:" My Bookings", url:"/user/mybookings" },
     {name:" My Cancellations", url:"/user/mycancellations" },
     {name:" User request Solved", url:"/user/requestsolved" },
+    {name:" Reward Points", url:"/user/rewardpoints"  },
+    {name: "Refunds" , url:"/user/totalrefunds"}
   ])
 
   const [admin, setAdmin] = React.useState([

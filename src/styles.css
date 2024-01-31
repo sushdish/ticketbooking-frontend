@@ -97,3 +97,11 @@ footer {
 .modal.show {
   display: block;
 }
+
+.positive-points {
+  color: green;
+}
+
+.negative-points {
+  color: red;
+}

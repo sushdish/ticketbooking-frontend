@@ -17,6 +17,8 @@ import ManageCategoriesV2 from "./admin/ManageCategoriesNewV2";
 import ManageTrips from "./admin/ManageTripsV2";
 import Cancellations from './core/components/CancellationsV2'
 import AdminCancellations from "./admin/AdminCancellationsV2";
+import RewardPoints from "./core/components/RewardPoints"
+import AllRefunds from "./core/components/AllRefunds"
 
 
 const App = () => {
@@ -44,6 +46,14 @@ const App = () => {
 
         <Route element={<PrivateRoute />}>
           <Route path="/user/requestsolved"  element={<RequestSolved />} />
+        </Route> 
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user/rewardpoints"  element={<RewardPoints />} />
+        </Route> 
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user/totalrefunds"  element={<AllRefunds />} />
         </Route> 
 
             {/*Admin Routes  */}

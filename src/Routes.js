@@ -15,10 +15,11 @@ import RequestSolved from "./core/components/ResolvedQueryV2";
 import AdminSolvedReq from "./admin/AdminAllSolvedReqV2";
 import ManageCategoriesV2 from "./admin/ManageCategoriesNewV2";
 import ManageTrips from "./admin/ManageTripsV2";
-import Cancellations from './core/components/CancellationsV2'
 import AdminCancellations from "./admin/AdminCancellationsV2";
 import RewardPoints from "./core/components/RewardPoints"
 import AllRefunds from "./core/components/AllRefunds"
+import Sales from "./core/components/Sales"
+import Revenue from "./core/components/Revenue"
 
 
 const App = () => {
@@ -87,6 +88,14 @@ const App = () => {
 
         <Route element={<AdminRoute />}>
           <Route path="/admin/cancellation/adminsolved" element={<AdminSolvedReq />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/sales" element={<Sales />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/revenue" element={<Revenue />} />
         </Route>
         
       </Routes>

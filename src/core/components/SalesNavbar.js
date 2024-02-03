@@ -74,24 +74,24 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [user, setUser] = React.useState([
-    {name:"All Trips", url:"/user/userdashboard" },
-    {name:" My Bookings", url:"/user/mybookings" },
-    {name:" My Cancellations", url:"/user/mycancellations" },
-    {name:" User request Solved", url:"/user/requestsolved" },
-    {name:" Reward Points", url:"/user/rewardpoints"  },
-    {name: "Refunds" , url:"/user/totalrefunds"}
-  ])
+//   const [user, setUser] = React.useState([
+//     {name:"All Trips", url:"/user/userdashboard" },
+//     {name:" My Bookings", url:"/user/mybookings" },
+//     {name:" My Cancellations", url:"/user/mycancellations" },
+//     {name:" User request Solved", url:"/user/requestsolved" },
+//     {name:" Reward Points", url:"/user/rewardpoints"  },
+//     {name: "Refunds" , url:"/user/totalrefunds"}
+//   ])
 
   const [admin, setAdmin] = React.useState([
-    {name: "All Trips" , url: "/admin/admindashboard"},
-    {name:"Create Categories", url:"/admin/create/category" },
-    {name:"Manage Categories", url:"/admin/categories/:categoryId"},
-    {name:"Create Trips", url:"/admin/create/trips"},
-    {name:"Manage Trips", url:"/admin/trips/update/:productId"},
-    {name:"User Cancellation Request", url:"/admin/cancellation/update"},
-    {name:"Solved Cancellation Record", url:"/admin/cancellation/adminsolved"},
-    {name:"Sales", url:"/admin/sales"},
+    // {name: "All Trips" , url: "/admin/admindashboard"},
+    // {name:"Create Categories", url:"/admin/create/category" },
+    // {name:"Manage Categories", url:"/admin/categories/:categoryId"},
+    // {name:"Create Trips", url:"/admin/create/trips"},
+    // {name:"Manage Trips", url:"/admin/trips/update/:productId"},
+    // {name:"User Cancellation Request", url:"/admin/cancellation/update"},
+    // {name:"Solved Cancellation Record", url:"/admin/cancellation/adminsolved"},
+    {name:"Revenue", url:"/admin/revenue"},
   ])
 
   const navigate = useNavigate();
@@ -115,7 +115,7 @@ export default function PersistentDrawerLeft() {
     }
   }
 
-   const navigationItems = isAdmin() ? admin : user;
+   const navigationItems = isAdmin() ? admin : "";
 
    const handleSubmit = (url) => {
     navigate(url)
@@ -145,7 +145,7 @@ export default function PersistentDrawerLeft() {
             
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-          { isAdmin() ? 'Admin Dashboard' : 'User DashBoard' }
+          { isAdmin() ? 'Sales Dashboard' : 'User DashBoard' }
           </Typography>
           <Button variant="outlined" color="inherit" style={{ position: 'absolute', right: 20, top: 20 }} onClick={handleLogout}>Logout</Button>
         </Toolbar>

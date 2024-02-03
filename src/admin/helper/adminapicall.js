@@ -382,3 +382,39 @@ export const getAllRefunds = (userId, token, page) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const getTotalRefund = (userId, token) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  return fetch(`${API}/refund/salestotalrefund/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(booking),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const getTotalBookings = (userId, token) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  return fetch(`${API}/booking/totalrevenue/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(booking),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

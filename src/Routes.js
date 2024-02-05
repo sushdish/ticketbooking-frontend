@@ -20,6 +20,7 @@ import RewardPoints from "./core/components/RewardPoints"
 import AllRefunds from "./core/components/AllRefunds"
 import Sales from "./core/components/Sales"
 import Revenue from "./core/components/Revenue"
+import Wallet from "./core/components/wallet"
 
 
 const App = () => {
@@ -56,6 +57,12 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/user/totalrefunds"  element={<AllRefunds />} />
         </Route> 
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user/wallet"  element={<Wallet />} />
+        </Route>
+
+       
 
             {/*Admin Routes  */}
 

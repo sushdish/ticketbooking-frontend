@@ -418,3 +418,40 @@ export const getTotalBookings = (userId, token) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const wallet = (userId, token, requestBody) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  console.log(requestBody, "425")
+  return fetch(`${API}/wallet/${userId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(requestBody),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const getTotalWallet = (userId, token) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  return fetch(`${API}/wallet/totalwallet/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(booking),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

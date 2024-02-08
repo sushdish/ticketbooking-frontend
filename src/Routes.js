@@ -21,6 +21,7 @@ import AllRefunds from "./core/components/AllRefunds"
 import Sales from "./core/components/Sales"
 import Revenue from "./core/components/Revenue"
 import Wallet from "./core/components/wallet"
+import Settings from "./admin/Settings"
 
 
 const App = () => {
@@ -103,6 +104,10 @@ const App = () => {
 
         <Route element={<AdminRoute />}>
           <Route path="/admin/revenue" element={<Revenue />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/settings" element={<Settings />} />
         </Route>
         
       </Routes>

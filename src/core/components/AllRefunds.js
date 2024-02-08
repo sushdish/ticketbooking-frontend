@@ -52,6 +52,7 @@ const RewardPoints = () => {
     }, []);
 
     const handlePagination = async (event , newPage) => {
+      // console.log(newPage, "55")
         setPage(newPage)
         event.preventDefault()
     

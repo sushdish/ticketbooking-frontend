@@ -80,7 +80,9 @@ const Home = () => {
   }, [])
 
   const handlePagination = async (event , newPage) => {
+    console.log(newPage, "83")
     setPage(newPage)
+    console.log(page, "85")
     event.preventDefault()
 
     await getAllTrip(newPage).then((data) => {

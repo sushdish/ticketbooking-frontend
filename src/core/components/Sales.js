@@ -18,7 +18,7 @@ import Navbar from "../components/NavBarv2"
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import SalesNavbar from "../components/SalesNavbar"
+import NavBar from "../components/NavBarv2"
 
 
 
@@ -57,7 +57,7 @@ useEffect(() => {
 
   return (
     <>
-    <SalesNavbar/>
+    <Navbar/>
     <Box
       sx={{
         display: 'flex',

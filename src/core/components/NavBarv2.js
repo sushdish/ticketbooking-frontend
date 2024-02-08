@@ -93,6 +93,7 @@ export default function PersistentDrawerLeft() {
     {name:"User Cancellation Request", url:"/admin/cancellation/update"},
     {name:"Solved Cancellation Record", url:"/admin/cancellation/adminsolved"},
     {name:"Sales", url:"/admin/sales"},
+    {name:"Settings", url:"/admin/settings"}
   ])
 
   const navigate = useNavigate();

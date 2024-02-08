@@ -105,3 +105,7 @@ footer {
 .negative-points {
   color: red;
 }
+
+.tabs-container {
+  margin-top: 20px; /* Adjust the value as needed */
+}

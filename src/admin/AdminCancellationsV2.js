@@ -53,6 +53,7 @@ const AdminCancellationsV2 = () => {
 
       const preload = () => {
         getPendingCancellations(user._id, token,page)
+       
         .then((data) => {
             console.log(data, "YY")  //bookingId is in form of _id
           if (data.err) {

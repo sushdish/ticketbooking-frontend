@@ -455,3 +455,73 @@ export const getTotalWallet = (userId, token) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const bookOffer = (userId, token, requestBody) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  console.log(requestBody, "425")
+  return fetch(`${API}/bookoffer/create/${userId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(requestBody),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const getAllOffer = (userId, token, page) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  console.log(page, "481")
+  return fetch(`${API}/bookoffer/alloffer/${userId}?page=${page + 1}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(booking),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const updateOffer = (userId, token, UpdatedofferDetails) => {
+  console.log(token, "90")
+  console.log(userId, "89")
+  // console.log(requestBody, "425")
+  console.log(UpdatedofferDetails, "500")
+  return fetch(`${API}/bookoffer/update/${userId}/${UpdatedofferDetails._id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(UpdatedofferDetails),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+
+export const getOfferById = (offerId) => {
+  console.log(offerId, "1")
+  return fetch(`${API}/bookoffer/offer/${offerId}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

@@ -45,7 +45,7 @@ const firstload = () => {
     if (data.err) {
       console.log(data.err)
     } else{
-      setTotalRevenue(data.totalBookings)
+      setTotalRevenue(data.totalRevenue)
     }
   })
 }

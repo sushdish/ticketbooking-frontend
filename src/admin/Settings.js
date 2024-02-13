@@ -35,7 +35,7 @@ import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
-import {  Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import Offers from './AddOffer'
 import EditIcon from '@mui/icons-material/Edit';
 import { blue } from '@mui/material/colors';
@@ -61,14 +61,14 @@ const Settings = () => {
   const [isCancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [sales, setSales] = useState({
     couponCode: "",
-        route_details: {
-          DestinationA: "",
-          DestinationB: "", 
-          Price: 0,
-          Message: "",
-          EndDate: ""
-          
-        },
+    route_details: {
+      DestinationA: "",
+      DestinationB: "",
+      Price: 0,
+      Message: "",
+      EndDate: ""
+
+    },
   })
 
   const preload = () => {
@@ -106,7 +106,7 @@ const Settings = () => {
     setPage(newPage)
     event.preventDefault()
 
-    await getAllAdmin(newPage).then((data) => {
+    await getAllAdmin(user._id, token, newPage).then((data) => {
       if (data.err) {
         console.log(data.err);
       } else {
@@ -134,13 +134,13 @@ const Settings = () => {
   //     });
   // }
 
-  // const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event) => {
 
-  // };
+  };
 
   const navigate = useNavigate();
   const { name, email, password, err } = values;
-  const { couponCode, route_details  } = sales
+  const { couponCode, route_details } = sales
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -180,9 +180,9 @@ const Settings = () => {
           window.alert("Registeration Successfull")
           console.log("Registration Successfull")
 
-          console.log(values, "73")
-          // console.log(success, "74")
-          navigate("/signin")
+          // console.log(values, "73")
+          // // console.log(success, "74")
+          // navigate("/signin")
 
         }
       })
@@ -225,7 +225,7 @@ const Settings = () => {
   }
 
   // const handleAddOfferButton = () => {
-  
+
   //   if (isAuthenticated()) {
 
   //     setCancelDialogOpen(true);
@@ -236,7 +236,7 @@ const Settings = () => {
 
   // const handleCloseAddOfferDialog = () => {
   //   setCancelDialogOpen(false);
-    
+
   // };
 
   // const AddOffers = (sales) => {
@@ -256,7 +256,7 @@ const Settings = () => {
   //             Price: "",
   //             Message: "",
   //             EndDate: ""
-              
+
   //           },
 
   //         });
@@ -294,7 +294,7 @@ const Settings = () => {
   //         Price: data.route_details.Price,
   //         Message: data.route_details.Message,
   //         EndDate: data.route_details.EndDate
-          
+
   //       },
   //         })
   //         console.log(sales, "299")
@@ -304,14 +304,14 @@ const Settings = () => {
   // }
 
   // const handleUpdate = () => {
-    
+
   //   const requestBody = {
   //     couponCode: sales.couponCode,
   //       route_details: sales.route_details,
   //       }
   //       console.log(requestBody, "77")
 
-   
+
   //   updateTrip(user._id, token, offerId, requestBody)
   //     .then((data) => {
   //       console.log(data, "3")
@@ -326,17 +326,17 @@ const Settings = () => {
   //         Price: data.route_details.Price,
   //         Message: data.route_details.Message,
   //         EndDate: data.route_details.EndDate
-          
+
   //       },
   //         });
   //         console.log(sales, "99")
-          // handleClose()
+  // handleClose()
 
-          // getEveryTrip()
-          // .then((updatedCategories) => {
-          //   console.log(updatedCategories, "4")
-          //   setTrips(updatedCategories);
-          // })
+  // getEveryTrip()
+  // .then((updatedCategories) => {
+  //   console.log(updatedCategories, "4")
+  //   setTrips(updatedCategories);
+  // })
   //         .catch((error) => {
   //           console.error('Error fetching categories:', error);
   //         });
@@ -432,53 +432,61 @@ const Settings = () => {
 
           </TabPanel>
           <TabPanel value="2">
-            <TableContainer component={Paper} sx={{ maxWidth: 600, marginLeft: '100px', marginRight: '100px', padding: 2 }}>
-              <Table sx={{ minWidth: 300, maxWidth: 600 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell> Details </TableCell>
-                    {/* <TableCell>Refund Amount</TableCell> */}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {admins.map((current) => (
-                    <TableRow key={current._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell component="th" scope="row">
-                        <div style={{ marginBottom: '8px' }}>
-                          Name : {current.name}
-                        </div >
-                        <div>
-                          {current.email}
-                        </div>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <div >
-                          <Button
-
-                            variant="contained"
-                            color="primary"
-                            onClick={() => statusToggle(current._id, current.status)}>
-                            {current.status}
-                          </Button>
-                        </div>
-                        {/* <VisibilityIcon onClick={() => handleViewButtonClick(points)}></VisibilityIcon> */}
-
-                      </TableCell>
-
-
+            <TextField
+              label="Search..."
+              id="Search"
+              // value={sales.route_details.DestinationA}
+              // onChange={handleChange('DestinationA')}
+            >
+              </TextField>
+              <TableContainer component={Paper} sx={{ maxWidth: 600, marginLeft: '100px', marginRight: '100px', padding: 2 }}>
+                <Table sx={{ minWidth: 300, maxWidth: 600 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell> Details </TableCell>
+                      {/* <TableCell>Refund Amount</TableCell> */}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {/* <TablePagination
-              component="div"
-              count={total}
-              page={page}
-              onPageChange={handlePagination}
-              rowsPerPage={5}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            /> */}
+                  </TableHead>
+                  <TableBody>
+                    {admins.map((current) => (
+                      <TableRow key={current._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell component="th" scope="row">
+                          <div style={{ marginBottom: '8px' }}>
+                            Name : {current.name}
+                          </div >
+                          <div>
+                            {current.email}
+                          </div>
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <div >
+                            <Button
+
+                              variant="contained"
+                              color="primary"
+                              onClick={() => statusToggle(current._id, current.status)}>
+                              {current.status}
+                            </Button>
+                          </div>
+                          {/* <VisibilityIcon onClick={() => handleViewButtonClick(points)}></VisibilityIcon> */}
+
+                        </TableCell>
+
+
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <TablePagination
+                  component="div"
+                  count={total}
+                  page={page}
+                  onPageChange={handlePagination}
+                  rowsPerPage={5}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableContainer>
+
           </TabPanel>
 
 
@@ -496,8 +504,8 @@ const Settings = () => {
               </Table> */}
 
               <OfferPage />
-           
-            {/* <TablePagination
+
+              {/* <TablePagination
               component="div"
               count={total}
               page={page}
@@ -505,9 +513,9 @@ const Settings = () => {
               rowsPerPage={5}
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
-              </TableContainer>
+            </TableContainer>
 
-             
+
             {/* <Button
               variant="contained"
               color="primary"
@@ -515,7 +523,7 @@ const Settings = () => {
             >
               Add Offers
             </Button> */}
-                          
+
             {/* <Dialog open={isCancelDialogOpen} onClose={handleCloseAddOfferDialog} >
             <Offers CloseAddOffer={() => (setCancelDialogOpen(false))}AddSales={AddOffers} />
             </Dialog> */}

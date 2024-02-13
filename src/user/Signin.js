@@ -27,6 +27,7 @@ const Signin = () => {
     email: "",
     password: "",
     err: "",
+    
     // success: false,
     // loading: false,
   });
@@ -48,7 +49,7 @@ const Signin = () => {
         console.log(data, "BB")
         if (data.err) {
           setValues({ ...values, err: data.err});
-          window.alert("Invalid username or password")
+          // window.alert("Invalid username or password")
         } else {
           authenticate(data, () => {
             if (data.user && data.user.role === 1){
@@ -73,10 +74,10 @@ const Signin = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        {/* {success == true ? (<Stack sx={{ width: '100%' }} spacing={2}>
+        {/* <CssBaseline />
+        {err == false ? (<Stack sx={{ width: '100%' }} spacing={2}>
 
-          <Alert severity="success">{message} </Alert>
+          <Alert severity="error">{values.err} </Alert>
         </Stack>
         ) : ("")} */}
         <Box

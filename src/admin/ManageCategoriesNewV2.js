@@ -5,7 +5,7 @@ import { IconButton, FormControlLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { blue } from '@mui/material/colors';
-import { getAllCategories, updateCategory, getCategoryById } from "./helper/adminapicall";
+import { getAllCategories, updateCategory, getCategoryById , deleteCategory} from "./helper/adminapicall";
 import { isAuthenticated } from "../auth/helper/index";
 import {
   DialogActions,
@@ -16,7 +16,7 @@ import {
   Button,
 } from '@mui/material';
 import Navbar from "../core/components/NavBarv2"
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
@@ -84,6 +84,38 @@ const MatEdit = ({ categoryId, setCategories }) => {
       });
   }
 
+  const handleDeleteClick = () => {
+    // console.log(categoryId, "281")
+  
+    // setoffertype("Delete")
+    getCategoryById(categoryId)
+      .then((data) => {
+        console.log(data, "BB")
+        if (data.err) {
+          console.log(data.err)
+        } else if (data) {
+          deleteCategory(categoryId, user._id, token)
+          .then((daata) => {
+            console.log(daata, "YY")
+            if (daata.err) {
+              console.log(daata.err);
+            } else {
+              console.log(daata, "173")
+            }
+            getAllCategories()
+             .then((data) => {
+           if (data.err) {
+          console.log(data.err);
+        } else {
+          setCategories(data);
+        }
+      })
+          })
+          
+        }
+      })
+  }
+
 
   return (
     <>
@@ -98,6 +130,8 @@ const MatEdit = ({ categoryId, setCategories }) => {
           </IconButton>
         }
       />
+
+
 
       <Dialog open={open} onClose={handleClose}>
 
@@ -125,7 +159,11 @@ const MatEdit = ({ categoryId, setCategories }) => {
         </DialogActions>
       </Dialog>
 
+      <DeleteIcon onClick={handleDeleteClick}></DeleteIcon>
+
     </>
+
+    
   );
 };
 

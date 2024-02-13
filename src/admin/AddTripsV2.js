@@ -139,6 +139,7 @@ const AddTrips = () => {
 
 
     const updatedtrips_details = values.trips_details;
+    console.log(updatedtrips_details, "142")
     updatedtrips_details.StartTime = startTime.format();
     updatedtrips_details.EndTime = endTime.format();
 

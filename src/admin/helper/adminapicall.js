@@ -52,6 +52,24 @@ export const updateCategory = (categoryId, userId, token, requestBody) => {
     .catch((err) => console.log(err));
 };
 
+export const deleteCategory = (categoryId, userId, token) => {
+  console.log(userId, "530")
+  console.log(categoryId, "531")
+  console.log(token, "532")
+  return fetch(`${API}/category/${categoryId}/${userId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      // console.log(response);s
+      return response.json;
+    })
+    .catch((err) => console.log(err));
+};
+
 /* Products */
 
 export const createTrip = (userId, token, requestBody) => {
@@ -518,6 +536,35 @@ export const updateOffer = (userId, token, UpdatedofferDetails) => {
 export const getOfferById = (offerId) => {
   console.log(offerId, "1")
   return fetch(`${API}/bookoffer/offer/${offerId}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const deleteOffer = (offerId, userId, token) => {
+  console.log(userId, "530")
+  console.log(offerId, "531")
+  console.log(token, "532")
+  return fetch(`${API}/deleteoffer/${offerId}/${userId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      // console.log(response);s
+      return response.json;
+    })
+    .catch((err) => console.log(err));
+};
+
+export const search = (userId) => {
+  console.log(userId, "1")
+  return fetch(`${API}/getUser/${userId}`, {
     method: "GET",
   })
     .then((response) => {

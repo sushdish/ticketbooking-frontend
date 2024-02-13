@@ -135,6 +135,8 @@ const RequestSolved = () => {
                     <p>Trip Destination(FROM): {selectedCancellation.tripDestinationB}</p>
                     <p>Start Time: {selectedCancellation.StartTime}</p>
                     <p>End Time: {selectedCancellation.EndTime}</p>
+                    <p>UserReason: {selectedCancellation.userReason}</p>
+                    <p>Admin Reason: {selectedCancellation.adminReason}</p>
                 </div>
             )}
     

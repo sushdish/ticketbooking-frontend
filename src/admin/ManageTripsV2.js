@@ -3,7 +3,7 @@ import { IconButton, FormControlLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { blue } from '@mui/material/colors';
-import { getAllTrip, updateTrip, getTripById , getEveryTrip} from "./helper/adminapicall";
+import { getAllTrip, updateTrip, getTripById , getEveryTrip, deleteTrip} from "./helper/adminapicall";
 import { isAuthenticated } from "../auth/helper/index";
 import {
   DialogActions,
@@ -16,6 +16,8 @@ import {
 import Navbar from "../core/components/NavBarv2"
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const MatEdit = ({tripId, setTrips}) => {
   const { user, token } = isAuthenticated();
@@ -148,6 +150,40 @@ const MatEdit = ({tripId, setTrips}) => {
         console.log(err);
       });
   }
+
+  const handleDeleteClick = () => {
+    getTripById(tripId)
+    .then((data) => {
+      console.log(data, "BB")
+      if (data.err) {
+        console.log(data.err)
+      } else if (data) {
+        deleteTrip(tripId, user._id, token)
+        .then((daata) => {
+          console.log(daata, "YY")
+          if (daata.err) {
+            console.log(daata.err);
+          } else {
+            console.log(daata, "173")
+          }
+          getEveryTrip()
+          .then((data) => {
+            if (data.err) {
+              console.log(data.err);
+            } else {
+              console.log('Fetched trips:', data);
+                setTrips(data);
+            }
+          })
+        })
+        
+      }
+    })
+  }
+
+
+
+
   return (
     <>
     
@@ -381,6 +417,8 @@ const MatEdit = ({tripId, setTrips}) => {
           <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
+
+      <DeleteIcon onClick={handleDeleteClick}></DeleteIcon>
       </>
   );
 };

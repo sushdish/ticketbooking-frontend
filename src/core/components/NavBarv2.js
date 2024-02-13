@@ -21,7 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { isAdmin } from '../../auth/helper/index';
 import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
-import {signout, isAuthenticated} from "../../auth/helper/index"
+import {signout, isAuthenticated, signin} from "../../auth/helper/index"
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 240;
@@ -123,6 +123,15 @@ export default function PersistentDrawerLeft() {
     navigate(url)
    }
 
+   const name =  () => {
+    if (isAuthenticated()) {
+      signin(() => {
+        localStorage.getItem("user.name")
+        console.log(localStorage.getItem, "130")
+      })
+    }
+   }
+
   //  const getuserName = localStorage.getItem('user')
   //  console.log(getuserName, "121")
   //  const username = JSON.parse(getuserName)
@@ -168,7 +177,7 @@ export default function PersistentDrawerLeft() {
       >
         
           <div style={{ marginTop: '20px' }}>
-            {/* <p>Welcome, {name}</p> */}
+            <p>Welcome, {name}</p>
           <AccountCircle  sx={{
             fontSize: 24,
             

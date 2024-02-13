@@ -3,7 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TablePagination from '@mui/material/TablePagination';
-import { getAllOffer, getOfferById, bookOffer , updateOffer} from "../../helper/adminapicall";
+import { getAllOffer, getOfferById, bookOffer , updateOffer, deleteOffer} from "../../helper/adminapicall";
 import { adminSignup, getAllAdmin, isAuthenticated, statusChange } from "../../../auth/helper/index";
 import HandleOffer from './HandleOffer';
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 
@@ -153,6 +154,79 @@ const OfferPage = () => {
       });
   }
 
+  const handleDeleteClick = (offerId) => {
+    console.log(offerId, "281")
+  
+    // setoffertype("Delete")
+    getOfferById(offerId)
+      .then((data) => {
+        console.log(data, "BB")
+        if (data.err) {
+          console.log(data.err)
+        } else if (data) {
+          deleteOffer(offerId, user._id, token)
+          .then((daata) => {
+            console.log(daata, "YY")
+            if (daata.err) {
+              console.log(daata.err);
+            } else {
+              console.log(daata, "173")
+            }
+            getAllOffer(user._id, token, page).then((data) => {
+              console.log(page, "97")
+              console.log(data, "YY")
+              if (data.err) {
+                console.log(data.err);
+              } else {
+                setOffers(data.offer);
+                setTotal(data.totalOffers)
+              }
+            });
+          })
+          
+        }
+      })
+  }
+
+// const DeleteOfferDetails = () => {
+//   // console.log(UpdatedofferDetails, "edit Offer Details")
+//   deleteOffer(user._id, token, UpdatedofferDetails)
+//       .then((data) => {
+//         console.log(data, "3")
+//         if (data.err) {
+//           console.log(data.err)
+//         } else {
+//           setSales({...sales, 
+//           _id: "",
+//           couponCode: "",
+//           route_details: {
+//           DestinationA: "",
+//           DestinationB: "", 
+//           Price: "",
+//           Message: "",
+//           EndDate:""
+          
+//         },
+//           });
+//           console.log(sales, "99")
+//           setCancelDialogOpen(false);
+
+//           getAllOffer(user._id, token, page).then((data) => {
+//             console.log(data, "YY")
+//             if (data.err) {
+//               console.log(data.err);
+//             } else {
+//               setOffers(data.offer);
+//               setTotal(data.totalOffers)
+//             }
+//           });
+//         }
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+// }
+
         const AddOffers = (sales) => {
           console.log(sales, "139")
           // event.preventDefault();
@@ -270,6 +344,17 @@ const OfferPage = () => {
 
                     </div>
 
+                   
+
+                  </TableCell>
+
+                  <TableCell>
+
+                  <div >
+                      <DeleteIcon onClick={() => handleDeleteClick(sale._id)}></DeleteIcon>
+
+                    </div>
+
                   </TableCell>
 
 
@@ -292,6 +377,7 @@ const OfferPage = () => {
               <HandleOffer CloseAddOffer={() => (setCancelDialogOpen(false))}
                 AddSales={AddOffers}
                 EditOffer={EditOfferDetails}
+                // DeleteOffer= {DeleteOfferDetails}
                 type={offertype}
                 sales={sales}
                 setSales={setSales}

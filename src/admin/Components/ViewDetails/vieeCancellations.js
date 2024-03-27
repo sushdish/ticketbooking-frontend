@@ -37,7 +37,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material
 import EditIcon from '@mui/icons-material/Edit';
 import { blue } from '@mui/material/colors';
 
-const viewUserDetails = ({selectedRequest}) => {
+const viewCancellations = ({selectedRequest}) => {
 
 
     
@@ -46,11 +46,9 @@ const viewUserDetails = ({selectedRequest}) => {
       <DialogContent>
         {selectedRequest && (
             <div>
-                <p>User Name: {selectedRequest.UserName}</p>
-                <p>User Email: {selectedRequest.UserEmail}</p>
-                <p>User Contact: {selectedRequest.UserContact}</p>
-                <p>ewallet: {selectedRequest.ewallet}</p>
-                <p>User Reason: {selectedRequest.userReason}</p>
+                <p>Admin Reason: {selectedRequest.adminReason}</p>
+                <p>Refund Amount: {selectedRequest.refundAmount}</p>
+                
                 
             </div>
         )}
@@ -63,4 +61,4 @@ const viewUserDetails = ({selectedRequest}) => {
   )
 }
 
-export default viewUserDetails
+export default viewCancellations

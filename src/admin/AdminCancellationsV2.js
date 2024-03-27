@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { getPendingCancellations, adminReason , refund, pigination} from "../admin/helper/adminapicall";
+import { getPendingCancellations, adminReason, refund, pigination } from "../admin/helper/adminapicall";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,192 +24,197 @@ import { useNavigate } from "react-router-dom";
 import Reply from "../admin/AdminReply"
 import Navbar from "../core/components/NavBarv2"
 import TablePagination from '@mui/material/TablePagination';
+import Dialogg from '../admin/Components/ViewDetails/DialogAllDetails'
+import TripDetails from '../admin/Components/ViewDetails/viewTripsDetails'
+import UserDetails from '../admin/Components/ViewDetails/viewUserDetails'
+
 
 const AdminCancellationsV2 = () => {
 
-    const { user, token } = isAuthenticated();
-    const [pendings, setPendings] = useState([]);
-    const [selectedRequest, setSelectedRequest] = useState({});
-    const [isViewDialogOpen, setViewDialogOpen] = useState(false);
-    const [isApproveDialogOpen, setApproveDialogOpen] = useState(false);
-    const [values, setValues] = useState({
-        adminReasonn: "",
-        createdData: "",
-        refundAmount: "",
-      });
+  const { user, token } = isAuthenticated();
+  const [pendings, setPendings] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState({});
+  const [isViewDialogOpen, setViewDialogOpen] = useState(false);
+  const [isApproveDialogOpen, setApproveDialogOpen] = useState(false);
+  const [values, setValues] = useState({
+    adminReasonn: "",
+    createdData: "",
+    refundAmount: "",
+  });
 
-      const [refunds, setRefunds] = useState({
-        amount: "",
-        created: "",
-      })
+  const [refunds, setRefunds] = useState({
+    amount: "",
+    created: "",
+  })
 
-      const {adminReasonn, createdData, refundAmount} = values
-      const {amount, created} = refunds
+  const { adminReasonn, createdData, refundAmount } = values
+  const { amount, created } = refunds
 
-      const [page , setPage] = useState(0)
-      const [total, setTotal] = useState()
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState()
 
-      const navigate = useNavigate()
+  const navigate = useNavigate()
 
-      const preload = () => {
-        getPendingCancellations(user._id, token,page)
-       
-        .then((data) => {
-            console.log(data, "YY")  //bookingId is in form of _id
-          if (data.err) {
-            console.log(data.err);
-          } else {
-            setTotal(data.totalCancellation)
-            setPendings(data.cancellation);
-            console.log(pendings, "62")
-           
-            console.log(total, "63")
-          }
-        });
-      };
-    
-      useEffect(() => {
-        preload();
-      }, []);
+  const preload = () => {
+    getPendingCancellations(user._id, token, page)
 
-      const handlePagination = async (event , newPage) => {
-        setPage(newPage)
-        event.preventDefault()
-    
-        await getPendingCancellations(newPage).then((data) => {
-          if (data.err) {
-            console.log(data.err, "75");
-          } else {
-            setPendings(data.cancellation);
-          }
-        })
-          .catch((error) => {
-            console.error("Error fetching trip data:", error);
-            // setError("Error fetching trip data");
-          });
-      }
-
-      const handleChangeRowsPerPage = (event) => {
-  
-      };
-
-      const handleViewButtonClick = (selectedRow) => {
-        setSelectedRequest(selectedRow)
-        setViewDialogOpen(true)
-    }
-
-    const handleCloseViewDialoge = () => {
-        setViewDialogOpen(false)
-    }
-
-    const handleCancelButtonClick = (selectedRow) => {
-        
-        if(isAuthenticated()) {
-            setSelectedRequest(selectedRow);
-            setApproveDialogOpen(true);
+      .then((data) => {
+        console.log(data, "YY")  //bookingId is in form of _id
+        if (data.err) {
+          console.log(data.err);
         } else {
-          navigate('/signin')
+          setTotal(data.totalCancellation)
+          setPendings(data.cancellation);
+          console.log(pendings, "62")
+
+          console.log(total, "63")
         }
-    
+      });
+  };
+
+  useEffect(() => {
+    preload();
+  }, []);
+
+  const handlePagination = async (event, newPage) => {
+    setPage(newPage)
+    event.preventDefault()
+
+    await getPendingCancellations(newPage).then((data) => {
+      if (data.err) {
+        console.log(data.err, "75");
+      } else {
+        setPendings(data.cancellation);
+      }
+    })
+      .catch((error) => {
+        console.error("Error fetching trip data:", error);
+        // setError("Error fetching trip data");
+      });
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+
+  };
+
+  const handleViewButtonClick = (selectedRow) => {
+    console.log(selectedRow, "99")
+    setSelectedRequest(selectedRow)
+    setViewDialogOpen(true)
+  }
+
+  const handleCloseViewDialoge = () => {
+    setViewDialogOpen(false)
+  }
+
+  const handleCancelButtonClick = (selectedRow) => {
+
+    if (isAuthenticated()) {
+      setSelectedRequest(selectedRow);
+      setApproveDialogOpen(true);
+    } else {
+      navigate('/signin')
+    }
+
+  };
+
+  const AcceptRequest = (values, refunds) => {
+    // console.log(tripDetails , '109')
+    console.log(values, "3")
+    console.log(refunds, "4")
+    setApproveDialogOpen(false)
+
+    // Further Create the Trip From Here
+
+
+    setValues({ ...values, err: false, loading: true });
+    if (!selectedRequest) {
+      console.error("Invalid bookings");
+      return;
+    }
+
+    const requestBody = {
+      tripId: selectedRequest.tripId,
+      bookingId: selectedRequest.bookingId,
+      cancellationId: selectedRequest.cancellationId,
+      amount: refunds.amount,
+      adminReason: values.adminReasonn,
+      refundAmount: refunds.amount
     };
 
-    const  AcceptRequest = (values, refunds) => {
-        // console.log(tripDetails , '109')
-        console.log(values, "3")
-        console.log(refunds, "4")
-        setApproveDialogOpen(false)
-    
-        // Further Create the Trip From Here
-    
-    
-        setValues({ ...values, err: false, loading: true });
-        if (!selectedRequest ) {
-          console.error("Invalid bookings");
-          return;
-        }
-        
-        const requestBody = {
-            tripId: selectedRequest.tripId,
-            bookingId: selectedRequest.bookingId,
-            cancellationId: selectedRequest.cancellationId, 
-            amount: refunds.amount,
-            adminReason: values.adminReasonn,
-            refundAmount: refunds.amount
-        };
-    
-        console.log(requestBody, 'Request Body');
-    
-        adminReason(user._id, token, requestBody )
-        refund(user._id, token, requestBody)
-          .then((data) => {
-            console.log(data, "86")
-            console.log(requestBody, "55")
+    console.log(requestBody, 'Request Body');
+
+    adminReason(user._id, token, requestBody)
+    refund(user._id, token, requestBody)
+      .then((data) => {
+        console.log(data, "86")
+        console.log(requestBody, "55")
+        if (data.err) {
+          setValues({ ...values, err: data.err, loading: false });
+        } else {
+          setValues({
+            ...values,
+            adminReasonn: "",
+            createdData: "",
+            refundAmount: data.amount,
+          });
+
+          setRefunds({
+            ...refunds,
+            amount: "",
+            created: "",
+          });
+
+          getPendingCancellations(user._id, token, page).then((data) => {
             if (data.err) {
-              setValues({ ...values, err: data.err, loading: false });
+              console.log(data.err);
             } else {
-                setValues({
-                    ...values,
-                    adminReasonn: "",
-                    createdData: "",
-                    refundAmount: data.amount,
-                  });
-
-                  setRefunds({
-                    ...refunds,
-                    amount: "",
-                    created: "",
-                  });
-
-                  getPendingCancellations(user._id, token, page).then((data) =>{
-                    if (data.err) {
-                      console.log(data.err);
-                    } else {
-                      setPendings(data.cancellation);
-                      setTotal(data.totalCancellation)
-                    }
-                  })
-                 
-                  setApproveDialogOpen(false);
-
-                  
+              setPendings(data.cancellation);
+              setTotal(data.totalCancellation)
             }
           })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+
+          setApproveDialogOpen(false);
+
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
 
 
   return (
     <>
       <div>
-        <Navbar/>
-      <Typography variant="h6" align="center" gutterBottom sx={{ margin: '30px 0' }}>
+        <Navbar />
+        <Typography variant="h6" align="center" gutterBottom sx={{ margin: '30px 0' }}>
           User Cancellation Request
         </Typography>
         <Typography variant="body1" align="center" gutterBottom sx={{ margin: '10px 0' }}>
           View all user Cancellation Request Here!
         </Typography>
         <TableContainer component={Paper} sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
-        <Table sx={{ minWidth: 300, maxWidth: 600 }} aria-label="simple table">
+          <Table sx={{ minWidth: 300, maxWidth: 600 }} aria-label="simple table">
             <TableHead>
-            <TableRow>
+              <TableRow>
                 <TableCell>Cancel Request(Trip NAme) </TableCell>
                 <TableCell>View Details</TableCell>
                 <TableCell>Approve Request</TableCell>
-            </TableRow>
+              </TableRow>
             </TableHead>
             <TableBody>
-                {pendings.map((pending) => (
-                     <TableRow key={pending._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        <TableCell component="th" scope="row">
-                           {pending.tripName}
-                        </TableCell>
-                        <TableCell>
-                    
+              {pendings.map((pending) => (
+                <TableRow key={pending._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">
+                    {pending.tripName}
+                  </TableCell>
+                  <TableCell>
+
                     <VisibilityIcon onClick={() => handleViewButtonClick(pending)}></VisibilityIcon>
-                   
+
                   </TableCell>
                   <TableCell>
                     <Button
@@ -220,26 +225,47 @@ const AdminCancellationsV2 = () => {
                       Approve
                     </Button>
                   </TableCell>
-                     </TableRow>
-                ))}
+                </TableRow>
+              ))}
             </TableBody>
-        </Table>
+          </Table>
         </TableContainer>
 
         <TablePagination
-      component="div"
-      count={total}
-      page={page}
-      onPageChange={handlePagination}
-      rowsPerPage={5}
-      onRowsPerPageChange={handleChangeRowsPerPage}
-    />
+          component="div"
+          count={total}
+          page={page}
+          onPageChange={handlePagination}
+          rowsPerPage={5}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
 
         {/* Dialoge code to display view Booking details */}
 
         <Dialog open={isViewDialogOpen} onClose={handleCloseViewDialoge}>
-        <DialogTitle>Booking Details</DialogTitle>
-        <DialogContent>
+        <Dialogg 
+           selectedRequest={selectedRequest}
+
+        />
+        
+        {/* <TripDetails
+            selectedRequest={selectedRequest}
+
+          />
+
+          <UserDetails
+             selectedRequest={selectedRequest}
+             /> */}
+
+          {/* <DialogTitle>Booking Details</DialogTitle> */}
+          {/* <Dialogg
+            selectedRequest={selectedRequest}
+
+          /> */}
+
+
+          
+          {/* <DialogContent>
         {selectedRequest && (
             <div>
                 <p>Trip Name: {selectedRequest.tripName}</p>
@@ -252,8 +278,8 @@ const AdminCancellationsV2 = () => {
 
 
             
-        </DialogContent>
-        <DialogActions>
+        </DialogContent> */}
+          <DialogActions>
             <Button onClick={handleCloseViewDialoge} color="primary">
               Close
             </Button>
@@ -262,7 +288,7 @@ const AdminCancellationsV2 = () => {
         </Dialog>
 
         <Dialog open={isApproveDialogOpen} onClose={handleCloseViewDialoge} >
-        <Reply  CancelBox={() => (setApproveDialogOpen(false))} AdminReply={AcceptRequest} />
+          <Reply CancelBox={() => (setApproveDialogOpen(false))} AdminReply={AcceptRequest} />
         </Dialog>
 
       </div>

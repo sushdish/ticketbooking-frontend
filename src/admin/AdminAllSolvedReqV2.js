@@ -23,11 +23,12 @@ import { isAuthenticated } from '../auth/helper/index';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../core/components/NavBarv2"
 import TablePagination from '@mui/material/TablePagination';
+import Dialogg from '../admin/Components/ViewDetails/DialogAllDetails'
 
 const AdminSolvedReq = () => {
     const { user, token } = isAuthenticated();
     const [solved, setSolved] = useState([]);
-    const [selectedCancellation, setSelectedCancellation] = useState({});
+  const [selectedRequest, setSelectedRequest] = useState({});
     const [isViewDialogOpen, setViewDialogOpen] = useState(false);
     const [page , setPage] = useState(0)
    const [total, setTotal] = useState()
@@ -35,7 +36,7 @@ const AdminSolvedReq = () => {
     const preload = () => {
       
       getAdminResolvedReq(user._id, token, page).then((data) => {
-          console.log(data, "YY")  //bookingId is in form of _id
+          console.log(data, "YY")  
         if (data.err) {
           console.log(data.err);
         } else {
@@ -71,7 +72,7 @@ const AdminSolvedReq = () => {
     };
 
     const handleViewButtonClick = (selectedRow) => {
-        setSelectedCancellation(selectedRow)
+        setSelectedRequest(selectedRow)
         setViewDialogOpen(true)
     }
 
@@ -125,21 +126,12 @@ const AdminSolvedReq = () => {
             {/* Dialoge code to display view Booking details */}
     
             <Dialog open={isViewDialogOpen} onClose={handleCloseViewDialoge}>
-            <DialogTitle>Booking Details</DialogTitle>
-            <DialogContent>
-            {selectedCancellation && (
-                <div>
-                    <p>Trip Name: {selectedCancellation.tripName}</p>
-                    <p>Trip Destination(TO): {selectedCancellation.tripDestinationA}</p>
-                    <p>Trip Destination(FROM): {selectedCancellation.tripDestinationB}</p>
-                    <p>Start Time: {selectedCancellation.StartTime}</p>
-                    <p>End Time: {selectedCancellation.EndTime}</p>
-                </div>
-            )}
-    
-    
-                
-            </DialogContent>
+            {/* <DialogTitle>Booking Details</DialogTitle> */}
+            <Dialogg 
+           selectedRequest={selectedRequest}
+
+        />
+           
             <DialogActions>
                 <Button onClick={handleCloseViewDialoge} color="primary">
                   Close

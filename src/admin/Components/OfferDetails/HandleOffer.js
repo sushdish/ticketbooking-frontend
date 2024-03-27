@@ -7,22 +7,28 @@ import {
     FormControl,
     InputLabel,
 } from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
 
-const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , EditOffer}) => {
-    
+
+const HandleOffer = ({ AddSales, CloseAddOffer, type, sales, setSales, EditOffer, endTime, setEndTime }) => {
+
 
     //   const { couponCode, route_details  } = sales
     //   const { DestinationA, DestinationB, Price, EndDate, Message } = route_details
 
-   
+
     const handleCloseDialog = () => {
-        CloseAddOffer ()
+        CloseAddOffer()
     }
 
     const CreateOffer = () => {
         console.log(sales, "35")
 
-        if(type === "Add"){
+        if (type === "Add") {
             AddSales(sales)
         } else if (type === 'Edit') {
             EditOffer(sales)
@@ -30,21 +36,25 @@ const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , Edit
     }
 
 
-   
+
 
     const handleChange = (name) => (event) => {
         const value = event.target.value;
         console.log(value, "43")
         console.log(name, "41")
 
-            setSales({...sales ,  
-                [name]: value,
-                route_details: {
+        setSales({
+            ...sales,
+            [name]: value,
+            route_details: {
                 ...sales.route_details,
-                [name] : value
-              }})
+                [name]: value,
+
+            }
+           
+        })
         // }
-       
+
     }
 
     return (
@@ -52,7 +62,7 @@ const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , Edit
 
             <DialogTitle>Select Your priority </DialogTitle>
             <DialogContent>
-                
+
                 <div style={{ textAlign: 'center' }}>
                     <FormControl fullWidth style={{ margin: '15px', width: '300px' }}>
                         {/* <InputLabel id="userReason">User Reason</InputLabel> */}
@@ -62,7 +72,7 @@ const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , Edit
                             value={sales.couponCode}
                             onChange={handleChange('couponCode')}
                         >
-                            
+
                         </TextField>
                         <TextField
                             label="DestinationA"
@@ -70,7 +80,7 @@ const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , Edit
                             value={sales.route_details.DestinationA}
                             onChange={handleChange('DestinationA')}
                         >
-                            
+
                         </TextField>
                         <TextField
                             label="DestinationB"
@@ -78,7 +88,7 @@ const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , Edit
                             value={sales.route_details.DestinationB}
                             onChange={handleChange('DestinationB')}
                         >
-                            
+
                         </TextField>
                         <TextField
                             label="Price"
@@ -86,23 +96,26 @@ const HandleOffer = ({  AddSales, CloseAddOffer , type , sales , setSales , Edit
                             value={sales.route_details.Price}
                             onChange={handleChange('Price')}
                         >
-                            
+
                         </TextField>
-                        <TextField
-                            label="EndDate"
-                            id="EndDate"
-                            value={sales.route_details.EndDate}
-                            onChange={handleChange('EndDate')}
-                        >
-                            
-                        </TextField>
+                        <Grid item xs={6}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['DateTimePicker']}  >
+                                    <DateTimePicker
+                                        label="End DAte"
+                                        value={endTime}
+                                        onChange={(newValue) => setEndTime(newValue)}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
                         <TextField
                             label="Message"
                             id="Message"
                             value={sales.route_details.Message}
                             onChange={handleChange('Message')}
                         >
-                            
+
                         </TextField>
                     </FormControl>
                 </div>
